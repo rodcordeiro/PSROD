@@ -1,17 +1,19 @@
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 #Get public and private function definition files.
-$Classes = @( Get-ChildItem -Path $PSScriptRoot\Classes\*.ps1 -ErrorAction SilentlyContinue -Recurse )
-$Enums = @( Get-ChildItem -Path $PSScriptRoot\Enums\*.ps1 -ErrorAction SilentlyContinue -Recurse )
+# $Classes = @( Get-ChildItem -Path $PSScriptRoot\Classes\*.ps1 -ErrorAction SilentlyContinue -Recurse )
+# $Enums = @( Get-ChildItem -Path $PSScriptRoot\Enums\*.ps1 -ErrorAction SilentlyContinue -Recurse )
 $Public = @( Get-ChildItem -Path $PSScriptRoot\Public\*.ps1 -ErrorAction SilentlyContinue -Recurse )
 $Private = @( Get-ChildItem -Path $PSScriptRoot\Private\*.ps1 -ErrorAction SilentlyContinue -Recurse )
 
 $AssemblyFolders = Get-ChildItem -Path $PSScriptRoot\Lib -Directory -ErrorAction SilentlyContinue
 if ($AssemblyFolders.BaseName -contains 'Standard') {
     $Assembly = @( Get-ChildItem -Path $PSScriptRoot\Lib\Standard\*.dll -ErrorAction SilentlyContinue )
-} else {
+}
+else {
     if ($PSEdition -eq 'Core') {
         $Assembly = @( Get-ChildItem -Path $PSScriptRoot\Lib\Core\*.dll -ErrorAction SilentlyContinue )
-    } else {
+    }
+    else {
         $Assembly = @( Get-ChildItem -Path $PSScriptRoot\Lib\Default\*.dll -ErrorAction SilentlyContinue )
     }
 }
@@ -19,7 +21,8 @@ $FoundErrors = @(
     Foreach ($Import in @($Assembly)) {
         try {
             Add-Type -Path $Import.Fullname -ErrorAction Stop
-        } catch [System.Reflection.ReflectionTypeLoadException] {
+        }
+        catch [System.Reflection.ReflectionTypeLoadException] {
             Write-Warning "Processing $($Import.Name) Exception: $($_.Exception.Message)"
             $LoaderExceptions = $($_.Exception.LoaderExceptions) | Sort-Object -Unique
             foreach ($E in $LoaderExceptions) {
@@ -27,7 +30,8 @@ $FoundErrors = @(
             }
             $true
             #Write-Error -Message "StackTrace: $($_.Exception.StackTrace)"
-        } catch {
+        }
+        catch {
             Write-Warning "Processing $($Import.Name) Exception: $($_.Exception.Message)"
             $LoaderExceptions = $($_.Exception.LoaderExceptions) | Sort-Object -Unique
             foreach ($E in $LoaderExceptions) {
@@ -38,10 +42,12 @@ $FoundErrors = @(
         }
     }
     #Dot source the files
-    Foreach ($Import in @($Private + $Public + $Classes + $Enums)) {
+    Foreach ($Import in @($Private + $Public )) {
+        #+ $Classes + $Enums
         Try {
             . $Import.Fullname
-        } Catch {
+        }
+        Catch {
             Write-Error -Message "Failed to import functions from $($import.Fullname): $_"
             $true
         }
