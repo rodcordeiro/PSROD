@@ -10,6 +10,8 @@ Function New-Appointment {
             }
         
             if ($env:Appointment) {
+                $appointment = $(New-Timespan $env:Appointment $([DateTime]::Now))
+                Write-Output "Time ellapsed: [$($appointment.Hours.toString('00')):$($appointment.Minutes.toString('00')):$($appointment.Seconds.toString('00'))]"
                 [Environment]::SetEnvironmentVariable('Appointment', $null)
             }
         
@@ -25,6 +27,7 @@ Function New-Appointment {
         }
         $function:_old_virtual_prompt = $function:prompt
         
+        # [System.Environment]::SetEnvironmentVariable('Appointment', [DateTime]::Now)
         $env:Appointment = [DateTime]::Now
         function global:prompt {
             # Add a prefix to the current prompt, but don't discard it.
