@@ -35,6 +35,13 @@ Function New-Appointment {
             $appointment = if ($(New-Timespan $env:Appointment $([DateTime]::Now)).TotalHours -lt 1) {
                 @{
                     Time   = $(New-Timespan $env:Appointment $([DateTime]::Now))
+                    Color  = 'green';
+                    Letter = if ($(New-Timespan $env:Appointment $([DateTime]::Now)).Minutes -lt 1) { 's' } else { 'm' };
+                }
+            }
+            elseif ($(New-Timespan $env:Appointment $([DateTime]::Now)).TotalHours -lt 8) {
+                @{
+                    Time   = $(New-Timespan $env:Appointment $([DateTime]::Now))
                     Color  = 'blue';
                     Letter = if ($(New-Timespan $env:Appointment $([DateTime]::Now)).Minutes -lt 1) { 's' } else { 'm' };
                 }
