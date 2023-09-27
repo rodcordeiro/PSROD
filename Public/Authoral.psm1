@@ -2,7 +2,8 @@ $Scripts = @( Get-ChildItem -Path $PSScriptRoot\Public\Authoral\*.ps1 -ErrorActi
 $FoundErrors = @(Foreach ($Import in @($Private + $Public )) {
         #+ $Classes + $Enums
         Try {
-            . $Import.Fullname
+            $Import
+            # . $Import.Fullname
         }
         Catch {
             Write-Error -Message "Failed to import functions from $($import.Fullname): $_"

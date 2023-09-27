@@ -13,3 +13,12 @@ class PDAConfig {
     [string[]]$exclude
     [PDAEnvironmentConfig[]]$env
 }
+class Repository {
+    [string]$repo
+    [string]$alias
+    [string[]]$branches
+}
+class Repositories {
+    [string]$parent
+    [Repository[]]$repos
+}
