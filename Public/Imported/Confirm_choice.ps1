@@ -1,4 +1,7 @@
 function Confirm-Choice {
+# Author: Adam the Automator
+# URL: https://github.com/adbertram/Random-PowerShell-Work/blob/master/Random%20Stuff/Confirm-Choice.ps1
+	
 	[OutputType('boolean')]
 	[CmdletBinding()]
 	param

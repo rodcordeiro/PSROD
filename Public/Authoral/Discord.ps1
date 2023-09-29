@@ -37,10 +37,9 @@ Function Discord {
             "avatar_url" = $Avatar
         }    
         if (!$Webhook) {
-            $Webhook = $env:disc_testes
+            $Webhook = $env:DISCORD_WEBHOOK
         }
     
         Invoke-WebRequest -Uri $Webhook -Method POST -Headers $headers -WebSession $session -Body "$($body | ConvertTo-Json)" -UseBasicParsing -ErrorAction SilentlyContinue
-    
     }
 }
