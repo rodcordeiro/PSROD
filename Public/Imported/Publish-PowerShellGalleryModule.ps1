@@ -349,9 +349,9 @@ a NuGet API key.
 		}
 
 		$publishAction = {
-			Write-Verbose -Message 'Publishing module...'
+			Write-Output  'Publishing module...'
 			Publish-Module -Name $module.Name -NuGetApiKey $NuGetApiKey
-			Write-Verbose -Message 'Done.'
+			Write-Output  'Done.'
 		}
 		if ($PublishToGallery.IsPresent) {
 			& $publishAction
