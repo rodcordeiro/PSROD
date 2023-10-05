@@ -1,6 +1,6 @@
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 #Get public and private function definition files.
-$Classes = @( Get-ChildItem -Path $PSScriptRoot\Classes\*.ps1 -ErrorAction SilentlyContinue -Recurse )
+# $Classes = @( Get-ChildItem -Path $PSScriptRoot\Classes\*.ps1 -ErrorAction SilentlyContinue -Recurse )
 # $Enums = @( Get-ChildItem -Path $PSScriptRoot\Enums\*.ps1 -ErrorAction SilentlyContinue -Recurse )
 $Public = @( Get-ChildItem -Path $PSScriptRoot\Public\*.ps1 -ErrorAction SilentlyContinue -Recurse )
 $Private = @( Get-ChildItem -Path $PSScriptRoot\Private\*.ps1 -ErrorAction SilentlyContinue -Recurse )
@@ -44,7 +44,7 @@ $FoundErrors = @(
         }
     }
     #Dot source the files
-    Foreach ($Import in @($Private + $Public + $Classes )) {
+    Foreach ($Import in @($Private + $Public)) {
         #+ $Classes + $Enums
         Try {
             . $Import.Fullname

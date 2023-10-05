@@ -9,7 +9,7 @@
 @{
 
 # Arquivo de m�dulo de script ou m�dulo bin�rio associado a este manifesto.
-RootModule = '.\psrod.psm1'
+RootModule = '.\rod.psm1'
 
 # N�mero da vers�o deste m�dulo.
 ModuleVersion = '0.0.1'
