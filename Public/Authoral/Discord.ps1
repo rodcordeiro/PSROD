@@ -1,4 +1,22 @@
 Function Discord {
+    <#
+    .SYNOPSIS
+        Sends a discord message through webhook
+    .DESCRIPTION
+        Calls a discord wehbook, sending text content through it.
+    .PARAMETER Content
+        Content of the message
+    .PARAMETER Username
+        Username that sent the message. Defaults to: Lord Vader
+    .PARAMETER Avatar
+        User avatar url. Defaults to: Lord vader image.
+    .EXAMPLE
+        PS> ./Discord -Content 'Some hello'
+    .LINK
+        https://github.com/rodcordeiro/psrod
+    .NOTES
+        Author: Rodrigo M. Cordeiro
+    #>
     param(
         [parameter(ValueFromPipelineByPropertyName)]
         [ValidateNotNullOrEmpty()]
@@ -7,7 +25,8 @@ Function Discord {
         [parameter(ValueFromPipelineByPropertyName)][String]$Avatar,
         [parameter(ValueFromPipelineByPropertyName)]
         [ValidateNotNullOrEmpty()]
-        [String]$Webhook
+        [String]$Webhook,
+        [Switch]$Silent
     )
     Begin {
         if (!$Webhook -and !$env:DISCORD_WEBHOOK) {
@@ -15,6 +34,10 @@ Function Discord {
             # $host.SetShouldExit(1)
             # Exit;
         }
+        # if (!$Silent) {
+        #     $Silent = $false
+        # }
+        
     }
     Process {
         $headers = @{}
@@ -40,6 +63,11 @@ Function Discord {
             $Webhook = $env:DISCORD_WEBHOOK
         }
     
-        Invoke-WebRequest -Uri $Webhook -Method POST -Headers $headers -WebSession $session -Body "$($body | ConvertTo-Json)" -UseBasicParsing -ErrorAction SilentlyContinue
+        $request = $(Invoke-WebRequest -Uri $Webhook -Method POST -Headers $headers -WebSession $session -Body "$($body | ConvertTo-Json)" -UseBasicParsing -ErrorAction SilentlyContinue)
+        
+        if (!$Silent) {
+            $request
+        }
+        
     }
 }

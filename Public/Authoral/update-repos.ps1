@@ -1,7 +1,7 @@
 function Update-Repos {
     
     $folders = Get-Repositories
-    Discord -Avatar "https://rodcordeiro.github.io/shares/img/eu.jpg" -Username "Script do rod" -Webhook $env:disc_testes -Content "Ignorem. Estou rodando um script de atualizacao automatica dos repositorios"
+    Discord -Avatar "https://rodcordeiro.github.io/shares/img/eu.jpg" -Username "Script do rod" -Webhook $env:DISCORD_WEBHOOK -Content "Ignorem. Estou rodando um script de atualizacao automatica dos repositorios"
     $folders | ForEach-Object {
         $folder = $_
         $($Folder.repos | ConvertFrom-Json) | ForEach-Object {
@@ -38,7 +38,7 @@ function Update-Repos {
                 $git_index = $PWD.ToString().IndexOf($git_dir)
                 $CmdPromptCurrentFolder = $PWD.ToString().Substring($git_index)
 
-                Discord -Avatar "https://rodcordeiro.github.io/shares/img/eu.jpg" -Content "Atualizado o $CmdPromptCurrentFolder" -Username "Script do rod" -Webhook $env:disc_testes
+                Discord -Avatar "https://rodcordeiro.github.io/shares/img/eu.jpg" -Content "Atualizado o $CmdPromptCurrentFolder" -Username "Script do rod" -Webhook $env:DISCORD_WEBHOOK
             }
         }
     }
