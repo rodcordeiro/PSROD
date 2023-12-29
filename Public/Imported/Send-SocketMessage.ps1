@@ -6,7 +6,7 @@ function Send-SocketMessage {
     param(
         [parameter(ValueFromPipelineByPropertyName, Mandatory = $true)][String]$Content,    
         [parameter(ValueFromPipelineByPropertyName)][int]$Port = 2050,
-        [parameter(ValueFromPipelineByPropertyName)]$IPAddress = [IPAddress]::Loopback
+        [parameter(ValueFromPipelineByPropertyName)][IPAddress]$IPAddress = [IPAddress]::Loopback
 
     )   
     Begin {

@@ -13,7 +13,7 @@ Function Discord {
     .EXAMPLE
         PS> ./Discord -Content 'Some hello'
     .LINK
-        https://github.com/rodcordeiro/psrod
+        https://github.com/rodcordeiro/PSROD/blob/main/Public/Authoral/Discord.ps1
     .NOTES
         Author: Rodrigo M. Cordeiro
     #>
