@@ -57,7 +57,7 @@
     # RequiredAssemblies = @()
 
     # Arquivos de script (.ps1) executados no ambiente do chamador antes da importa��o deste m�dulo.
-    # ScriptsToProcess = @()
+    ScriptsToProcess  = @('private/classes.ps1', 'private/preventiva.ps1')
 
     # Arquivos de tipo (.ps1xml) a serem carregados durante a importa��o deste m�dulo
     # TypesToProcess = @()
@@ -126,7 +126,7 @@
     # CmdletsToExport = '*'
 
     # Vari�veis a serem exportadas deste m�dulo
-    # VariablesToExport = @()
+    # VariablesToExport = @("PDAEnvironmentConfig", "PDAConfig", "Repository", "Repositories")
 
     # Aliases a serem exportados deste m�dulo. Para melhor desempenho, n�o use curingas e n�o exclua a entrada. Use uma matriz vazia se n�o houver nenhum alias a ser exportado.
     # AliasesToExport = @()
