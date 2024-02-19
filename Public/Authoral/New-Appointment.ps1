@@ -4,15 +4,16 @@ Function New-Appointment {
     Begin {}
     Process {
         function global:Stop-Appointment([switch] $NonDestructive) {
+            $appoint = [System.Environment]::GetEnvironmentVariable('Appointment', "Machine")
             if (Test-Path function:_old_virtual_prompt) {
                 $function:prompt = $function:_old_virtual_prompt
                 Remove-Item function:\_old_virtual_prompt
             }
         
-            if ($env:Appointment) {
-                $appointment = $(New-Timespan $env:Appointment $([DateTime]::Now))
+            if ($appoint) {
+                $appointment = $(New-Timespan $([datetime]$appoint) $([DateTime]::UtcNow))
                 Write-Output "Time ellapsed: [$($appointment.Hours.toString('00')):$($appointment.Minutes.toString('00')):$($appointment.Seconds.toString('00'))]"
-                [Environment]::SetEnvironmentVariable('Appointment', $null)
+                [Environment]::SetEnvironmentVariable('Appointment', $null, "Machine")
             }
         
             if (!$NonDestructive) {
@@ -27,33 +28,35 @@ Function New-Appointment {
         }
         $function:_old_virtual_prompt = $function:prompt
         
-        # [System.Environment]::SetEnvironmentVariable('Appointment', [DateTime]::Now)
-        $env:Appointment = [DateTime]::Now
+        
+        [System.Environment]::SetEnvironmentVariable('Appointment', [DateTime]::UtcNow, "Machine")
         function global:prompt {
             # Add a prefix to the current prompt, but don't discard it.
             $previous_prompt_value = & $function:_old_virtual_prompt
-            $appointment = if ($(New-Timespan $env:Appointment $([DateTime]::Now)).TotalHours -lt 1) {
+            
+            $appointment = if ($(New-Timespan [System.Environment]::GetEnvironmentVariable('Appointment', "Machine") $([DateTime]::Now)).TotalHours -lt 1) {
                 @{
-                    Time   = $(New-Timespan $env:Appointment $([DateTime]::Now))
+                    Time   = $(New-Timespan [System.Environment]::GetEnvironmentVariable('Appointment', "Machine") $([DateTime]::Now))
                     Color  = 'green';
-                    Letter = if ($(New-Timespan $env:Appointment $([DateTime]::Now)).Minutes -lt 1) { 's' } else { 'm' };
+                    Letter = if ($(New-Timespan [System.Environment]::GetEnvironmentVariable('Appointment', "Machine") $([DateTime]::Now)).Minutes -lt 1) { 's' } else { 'm' };
                 }
             }
-            elseif ($(New-Timespan $env:Appointment $([DateTime]::Now)).TotalHours -lt 8) {
+            elseif ($(New-Timespan [System.Environment]::GetEnvironmentVariable('Appointment', "Machine") $([DateTime]::Now)).TotalHours -lt 8) {
                 @{
-                    Time   = $(New-Timespan $env:Appointment $([DateTime]::Now))
+                    Time   = $(New-Timespan [System.Environment]::GetEnvironmentVariable('Appointment', "Machine") $([DateTime]::Now))
                     Color  = 'blue';
-                    Letter = if ($(New-Timespan $env:Appointment $([DateTime]::Now)).Minutes -lt 1) { 's' } else { 'm' };
+                    Letter = if ($(New-Timespan [System.Environment]::GetEnvironmentVariable('Appointment', "Machine") $([DateTime]::Now)).Minutes -lt 1) { 's' } else { 'm' };
                 }
             }
             else {
                 @{
-                    Time   = $(New-Timespan $env:Appointment $([DateTime]::Now))
+                    Time   = $(New-Timespan [System.Environment]::GetEnvironmentVariable('Appointment', "Machine") $([DateTime]::Now))
                     Color  = 'red';
                     Letter = 'h';
                 }
             }
             $new_prompt_value = Write-Host "[$($appointment.Time.Hours.toString('00')):$($appointment.Time.Minutes.toString('00')):$($appointment.Time.Seconds.toString('00'))] " -ForegroundColor $appointment.Color -NoNewline
+            
             ($new_prompt_value + $previous_prompt_value)
         }
         
