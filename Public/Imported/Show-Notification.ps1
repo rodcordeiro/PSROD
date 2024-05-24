@@ -5,7 +5,10 @@ function Show-Notification {
         $ToastTitle,
         [string]
         [parameter(ValueFromPipeline)]
-        $ToastText
+        $ToastText,
+        [datetime]
+        [parameter(ValueFromPipeline, Mandatory = $false)]
+        $Schedule
     )
         
     # https://den.dev/blog/powershell-windows-notification/
@@ -20,11 +23,24 @@ function Show-Notification {
     $SerializedXml = New-Object Windows.Data.Xml.Dom.XmlDocument
     $SerializedXml.LoadXml($RawXml.OuterXml)
 
-    $Toast = [Windows.UI.Notifications.ToastNotification]::new($SerializedXml)
+    if ($Schedule) {
+        $Toast = [Windows.UI.Notifications.ScheduledToastNotification]::new($SerializedXml, $Schedule)
+        $Toast.Id = 'scheduled_toasd'
+    }
+    else {
+        $Toast = [Windows.UI.Notifications.ToastNotification]::new($SerializedXml)
+    }
+    
     $Toast.Tag = "PowerShell"
     $Toast.Group = "PowerShell"
     $Toast.ExpirationTime = [DateTimeOffset]::Now.AddMinutes(1)
-
+    
+   
+    
     $Notifier = [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier("PowerShell")
+    if ($Schedule) {
+        $Notifier.addToSchedule($Toast);
+        return;
+    }
     $Notifier.Show($Toast);
 }
