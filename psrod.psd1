@@ -121,7 +121,9 @@
         "Write-Calendar",
         "Preventiva",
         "CalcularSaida",
-        "Get-Weather", "CalcularHorarios"
+        "Get-Weather",
+        "CalcularHorarios",
+        "Open"
     )
 
     # Cmdlets a serem exportados deste m�dulo. Para melhor desempenho, n�o use curingas e n�o exclua a entrada. Use uma matriz vazia se n�o houver nenhum cmdlet a ser exportado.
