@@ -50,6 +50,10 @@ function Open {
             Invoke-Item $(Resolve-Path -Path $Path\*.sln )
             return
         }
+        if ( $(Resolve-Path -Path $Path\*.csproj  -ErrorAction SilentlyContinue) ) {
+            Invoke-Item $(Resolve-Path -Path $Path\*.csproj )
+            return
+        }
 
         # Test if path has package.json
         if ($(Resolve-Path -Path $Path\package.json -ErrorAction SilentlyContinue)) {

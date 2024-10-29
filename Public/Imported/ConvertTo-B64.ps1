@@ -6,7 +6,7 @@ Function ConvertTo-B64 {
         [ValidateNotNullOrEmpty()]
         [String]$Content
     )
-    write-param
+    # write-param
     $encoded = [Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes($Content))
     return  $encoded
     
