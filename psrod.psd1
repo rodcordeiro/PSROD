@@ -125,7 +125,11 @@
         "CalcularHorarios",
         "Open",
         "Update-DotnetPackages",
-        "Update-DotnetProjects", "Export-SwaggerAsOcelot", "Export-OcelotEntries", "Flatten-Array"
+        "Update-DotnetProjects",
+        "Export-SwaggerAsOcelot",
+        "Export-OcelotEntries",
+        "Flatten-Array",
+        "Invoke-TextToSpeech"
     )
 
     # Cmdlets a serem exportados deste m�dulo. Para melhor desempenho, n�o use curingas e n�o exclua a entrada. Use uma matriz vazia se n�o houver nenhum cmdlet a ser exportado.
