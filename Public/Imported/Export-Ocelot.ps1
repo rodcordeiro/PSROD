@@ -7,6 +7,7 @@ function Export-SwaggerAsOcelot {
         [switch]$Prod,
         [switch]$ReturnAsObject
     )
+
     begin {
         $url = "backend.torratorra.com.br"  
         if (!$Prod) {
@@ -18,6 +19,7 @@ function Export-SwaggerAsOcelot {
         # Output JSON file
         $outputFile = "$Chave.json"
     }
+
     process {
         # Fetch the OpenAPI JSON schema
         try {
@@ -27,11 +29,13 @@ function Export-SwaggerAsOcelot {
         catch {
             Throw "Failed to fetch OpenAPI schema: $_"
         }
+
         # Extract paths and format them
         $formattedPaths = @()
-        
+
         foreach ($path in $openApiSchema.paths.PSObject.Properties) {
             $methods = @()
+
             foreach ($method in $path.Value.PSObject.Properties) {
                 $methods += $method.Name.ToUpper()
             }
@@ -47,10 +51,17 @@ function Export-SwaggerAsOcelot {
                 );
                 UpstreamPathTemplate     = $path.Name;
                 UpstreamHttpMethod       = $methods;
-                SwaggerKey               = $Chave
+                SwaggerKey               = $Chave;
+                "RateLimitOptions"       = @{
+                    "ClientWhitelist"    = @(); # array of strings
+                    "EnableRateLimiting" = $true;
+                    "Period"             = "1s"; # seconds; minutes; hours; days
+                    "PeriodTimespan"     = 30; # only seconds
+                    "Limit"              = 3
+                }
             }
         }
-        
+
         $dictionary = [PSCustomObject]@{
             Routes           = $formattedPaths;
             SwaggerEndPoints = @{
@@ -62,10 +73,8 @@ function Export-SwaggerAsOcelot {
                     })
             }
         }
-        # $RouteKeyOrder = @("DownstreamPathTemplate", "DownstremScheme", "DownstreamHostAndPorts", "UpstreamPathTemplate", "UpstreamHttpMethod", "SwaggerKey");
-        # $SwaggerEndPointsOrder = @("Key", "Config");
-        # $SwaggerEndPointsConfigOrder = @("Name", "Version", "Url");
     }
+ 
     end {
         # Convert to JSON
         $jsonOutput = $dictionary | ConvertTo-Json -Depth 10 -Compress
@@ -82,7 +91,6 @@ function Export-SwaggerAsOcelot {
         }
     }
 }
-
 
 class OcelotEntryKeys {
     [int] $Porta
