@@ -32,25 +32,25 @@ function clone {
     )
 
     if (!$Path) {
-        Write-Output "You must provide a repository to clone!"
+        Throw "You must provide a repository to clone!"
     }
+
     $repository = $Path
     $destiny = if ($Folder) { $Folder } else { $pwd }
     $localFolder = if ($Alias) { $Alias } else { $(Split-Path -Path $repository -Leaf) }
 
-    if ($(Split-Path -Path $destiny -Leaf) -eq 'personal' -Or $(Split-Path -Path $destiny -Leaf) -eq 'pda' -Or $(Split-Path -Path $destiny -Leaf) -eq 'estudos' -Or $(Split-Path -Path $destiny -Leaf) -eq 'koda' -Or $(Split-Path -Path $destiny -Leaf) -eq 'ers' -Or $(Split-Path -Path $destiny -Leaf) -eq 'innovagenius' -Or $confirm) {
-        if ($folder) { Set-Location $(Resolve-Path -Path $Folder) }
-        git clone $repository $(if ($Alias) { $Alias })
-        Set-Location $(Resolve-Path -Path $localFolder)
-        return
+    $project_paths = ((Resolve-Path -Path '~/projetos').Path)
+    
+    if (!($destiny.Path.Contains($project_paths)) -and !$confirm) {
+        $response = (Confirm-Choice -Title "You're outside of the predefined projects folders" -PromptMessage "Are you sure you want to proceed?")
+        if (!$response) {
+            Throw "Cancelling cloning projects. Have a nice day!"
+        }
     }
 
-    $response = Read-Host "You're outside of the predefined projects folders. Do you want to proceed? ([Y]es/[N]o)"
-    if ($response -eq 'Y' -Or $response -eq 'y' -Or $response -eq 'S' -Or $response -eq 's') {
-        if ($folder) { Set-Location $(Resolve-Path -Path $Folder) }
-        git clone $repository $(if ($Alias) { $Alias })
-        Set-Location $(Resolve-Path -Path $localFolder)
-        return
-    }
-    Write-Host "Cancelling cloning projects. Have a nice day!"
+        
+    if ($folder) { Set-Location $(Resolve-Path -Path $Folder) }
+    git clone $repository $(if ($Alias) { $Alias })
+    Set-Location $(Resolve-Path -Path $localFolder)
+    
 }

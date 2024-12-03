@@ -1,11 +1,11 @@
 ---
 external help file: psrod-help.xml
 Module Name: psrod
-online version: https://github.com/fleschutz/PowerShell
+online version: http://gallery.technet.microsoft.com/Get-UserSessions-Parse-b4c97837
 schema: 2.0.0
 ---
 
-# Get-Repositories
+# Get-Weather
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
@@ -13,7 +13,7 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Get-Repositories [-AsJson] [<CommonParameters>]
+Get-Weather [-Complete] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,8 +30,8 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -AsJson
-{{ Fill AsJson Description }}
+### -Complete
+{{ Fill Complete Description }}
 
 ```yaml
 Type: SwitchParameter

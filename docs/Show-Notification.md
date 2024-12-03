@@ -1,7 +1,7 @@
 ---
 external help file: psrod-help.xml
 Module Name: psrod
-online version: https://github.com/fleschutz/PowerShell
+online version: https://github.com/rodcordeiro/PSROD/blob/main/Public/Authoral/Preventive.ps1
 schema: 2.0.0
 ---
 
@@ -13,7 +13,8 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Show-Notification [[-ToastTitle] <String>] [[-ToastText] <String>] [<CommonParameters>]
+Show-Notification [[-ToastTitle] <String>] [[-ToastText] <String>] [[-Schedule] <DateTime>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -29,6 +30,21 @@ PS C:\> {{ Add example code here }}
 {{ Add example description here }}
 
 ## PARAMETERS
+
+### -Schedule
+{{ Fill Schedule Description }}
+
+```yaml
+Type: DateTime
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 2
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
 
 ### -ToastText
 {{ Fill ToastText Description }}
@@ -66,6 +82,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.String
+
+### System.DateTime
 
 ## OUTPUTS
 

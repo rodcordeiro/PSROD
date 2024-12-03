@@ -1,7 +1,7 @@
 ---
 external help file: psrod-help.xml
 Module Name: psrod
-online version: https://github.com/fleschutz/PowerShell
+online version: https://github.com/rodcordeiro/PSROD/blob/main/Public/Authoral/Preventive.ps1
 schema: 2.0.0
 ---
 
@@ -12,7 +12,7 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Send-SocketMessage [-Content] <String> [[-Port] <Int32>] [[-IPAddress] <Object>] [<CommonParameters>]
+Send-SocketMessage [-Content] <String> [[-Port] <Int32>] [[-IPAddress] <IPAddress>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -63,7 +63,7 @@ Accept wildcard characters: False
 {{ Fill IPAddress Description }}
 
 ```yaml
-Type: Object
+Type: IPAddress
 Parameter Sets: (All)
 Aliases:
 

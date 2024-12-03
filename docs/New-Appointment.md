@@ -1,7 +1,7 @@
 ---
 external help file: psrod-help.xml
 Module Name: psrod
-online version:
+online version: http://gallery.technet.microsoft.com/Get-UserSessions-Parse-b4c97837
 schema: 2.0.0
 ---
 

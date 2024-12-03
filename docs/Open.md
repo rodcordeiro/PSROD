@@ -1,46 +1,73 @@
 ---
 external help file: rod-help.xml
 Module Name: psrod
-online version: https://github.com/rodcordeiro/PSROD/blob/main/Public/Authoral/Preventive.ps1
+online version: http://gallery.technet.microsoft.com/Get-UserSessions-Parse-b4c97837
 schema: 2.0.0
 ---
 
-# Timer
+# Open
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
 
 ## SYNTAX
 
 ```
-Timer [[-Time] <Int32>] [<CommonParameters>]
+Open [[-Path] <String>] [-AsFolder] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+Open the specified path in editor or file explorer
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXEMPLO 1
+```
+Open ./desktop
 ```
 
-{{ Add example description here }}
+### EXEMPLO 2
+```
+Open Project/Project.sln
+```
+
+### EXEMPLO 3
+```
+Open archive.json
+```
+
+### EXEMPLO 4
+```
+Open Project -AsFolder
+```
 
 ## PARAMETERS
 
-### -Time
-{{ Fill Time Description }}
+### -Path
+{{ Fill Path Description }}
 
 ```yaml
-Type: Int32
+Type: String
 Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 0
+Position: 1
 Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -AsFolder
+{{ Fill AsFolder Description }}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
@@ -50,11 +77,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.Int32
-
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS

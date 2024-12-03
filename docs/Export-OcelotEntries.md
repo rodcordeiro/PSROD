@@ -1,11 +1,11 @@
 ---
 external help file: psrod-help.xml
 Module Name: psrod
-online version: https://github.com/fleschutz/PowerShell
+online version: https://github.com/rodcordeiro/PSROD/blob/main/Public/Authoral/Discord.ps1
 schema: 2.0.0
 ---
 
-# Get-Repositories
+# Export-OcelotEntries
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
@@ -13,7 +13,7 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Get-Repositories [-AsJson] [<CommonParameters>]
+Export-OcelotEntries [[-keys] <OcelotEntryKeys[]>] [-Prod] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,8 +30,8 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -AsJson
-{{ Fill AsJson Description }}
+### -Prod
+{{ Fill Prod Description }}
 
 ```yaml
 Type: SwitchParameter
@@ -40,6 +40,21 @@ Aliases:
 
 Required: False
 Position: Nomeado
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -keys
+{{ Fill keys Description }}
+
+```yaml
+Type: OcelotEntryKeys[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 0
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

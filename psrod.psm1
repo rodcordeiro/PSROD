@@ -1,9 +1,7 @@
-[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
-#Get public and private function definition files.
-$Classes = @( Get-ChildItem -Path $PSScriptRoot\Classes\*.ps1 -ErrorAction SilentlyContinue -Recurse )
-# $Enums = @( Get-ChildItem -Path $PSScriptRoot\Enums\*.ps1 -ErrorAction SilentlyContinue -Recurse )
-$Public = @( Get-ChildItem -Path $PSScriptRoot\Public\*.ps1 -ErrorAction SilentlyContinue -Recurse )
-$Private = @( Get-ChildItem -Path $PSScriptRoot\Private\*.ps1 -ErrorAction SilentlyContinue -Recurse )
+﻿[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+
+$AuthoralFunctions = Get-ChildItem -Path "$PSScriptRoot\Public\Authoral" -Filter *.ps1
+$ImportedFunctions = Get-ChildItem -Path "$PSScriptRoot\Public\Imported" -Filter *.ps1
 $AssemblyFolders = Get-ChildItem -Path $PSScriptRoot\Lib -Directory -ErrorAction SilentlyContinue
 
 Add-Type -AssemblyName PresentationCore, PresentationFramework
@@ -19,6 +17,7 @@ else {
         $Assembly = @( Get-ChildItem -Path $PSScriptRoot\Lib\Default\*.dll -ErrorAction SilentlyContinue )
     }
 }
+
 $FoundErrors = @(
     Foreach ($Import in @($Assembly)) {
         try {
@@ -44,8 +43,7 @@ $FoundErrors = @(
         }
     }
     #Dot source the files
-    Foreach ($Import in @($Classes + $Private + $Public)) {
-        #+ $Classes + $Enums
+    Foreach ($Import in @($Classes + $AuthoralFunctions + $ImportedFunctions)) {
         Try {
             . $Import.Fullname
         }
@@ -62,4 +60,4 @@ if ($FoundErrors.Count -gt 0) {
     break
 }
 
-Export-ModuleMember -Function '*' -Alias '*' 
+Export-ModuleMember -Function '*' -Alias '*'

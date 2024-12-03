@@ -1,39 +1,39 @@
 ---
 external help file: rod-help.xml
 Module Name: psrod
-online version: https://github.com/rodcordeiro/PSROD/blob/main/Public/Authoral/Discord.ps1
+online version: https://github.com/rodcordeiro/PSROD/blob/main/Public/Authoral/CalcularSaida.ps1
 schema: 2.0.0
 ---
 
-# Discord
+# CalcularHorarios
 
 ## SYNOPSIS
-Sends a discord message through webhook
+Calculates exit time
 
 ## SYNTAX
 
 ```
-Discord [[-Content] <String>] [[-Username] <String>] [[-Avatar] <String>] [[-Webhook] <String>] [-Silent]
+CalcularHorarios [[-Entrada] <DateTime>] [[-Almoco] <DateTime>] [[-Retorno] <DateTime>] [-Output]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Calls a discord wehbook, sending text content through it.
+Receives entrance and lunch times and calculates estimated exit time
 
 ## EXAMPLES
 
 ### EXEMPLO 1
 ```
-./Discord -Content 'Some hello'
+CalcularSaida -Entrada 9:10 -Almoco 12:15 -Retorno 13:35
 ```
 
 ## PARAMETERS
 
-### -Content
-Content of the message
+### -Entrada
+Entrance time
 
 ```yaml
-Type: String
+Type: DateTime
 Parameter Sets: (All)
 Aliases:
 
@@ -44,12 +44,11 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -Username
-Username that sent the message.
-Defaults to: Lord Vader
+### -Almoco
+Exit for lunch time
 
 ```yaml
-Type: String
+Type: DateTime
 Parameter Sets: (All)
 Aliases:
 
@@ -60,12 +59,11 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -Avatar
-User avatar url.
-Defaults to: Lord vader image.
+### -Retorno
+Lunch time returns
 
 ```yaml
-Type: String
+Type: DateTime
 Parameter Sets: (All)
 Aliases:
 
@@ -76,23 +74,8 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -Webhook
-{{ Fill Webhook Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 4
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -Silent
-{{ Fill Silent Description }}
+### -Output
+Outputs only time without friendly message
 
 ```yaml
 Type: SwitchParameter
@@ -102,7 +85,7 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -114,10 +97,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-Author: Rodrigo M.
-Cordeiro
 
 ## RELATED LINKS
 
-[https://github.com/rodcordeiro/PSROD/blob/main/Public/Authoral/Discord.ps1](https://github.com/rodcordeiro/PSROD/blob/main/Public/Authoral/Discord.ps1)
+[https://github.com/rodcordeiro/PSROD/blob/main/Public/Authoral/CalcularSaida.ps1](https://github.com/rodcordeiro/PSROD/blob/main/Public/Authoral/CalcularSaida.ps1)
 

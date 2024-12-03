@@ -13,7 +13,7 @@ Scans the network for open/closed ports
 ## SYNTAX
 
 ```
-Find-OpenPorts [[-Network] <String>] [[-Port] <Int32>] [<CommonParameters>]
+Find-OpenPorts [[-Network] <String>] [[-Ips] <String[]>] [[-Ports] <Int32[]>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,23 +38,38 @@ Aliases:
 
 Required: False
 Position: 1
-Default value: 192.168.100
-Accept pipeline input: False
+Default value: None
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -Port
-{{ Fill Port Description }}
+### -Ips
+{{ Fill Ips Description }}
 
 ```yaml
-Type: Int32
+Type: String[]
 Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: 2
-Default value: 8080
-Accept pipeline input: False
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Ports
+{{ Fill Ports Description }}
+
+```yaml
+Type: Int32[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 3
+Default value: @(8080)
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 

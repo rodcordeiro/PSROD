@@ -57,7 +57,7 @@ function Export-SwaggerAsOcelot {
                     "EnableRateLimiting" = $true;
                     "Period"             = "1s"; # seconds; minutes; hours; days
                     "PeriodTimespan"     = 30; # only seconds
-                    "Limit"              = 3
+                    "Limit"              = 5
                 }
             }
         }

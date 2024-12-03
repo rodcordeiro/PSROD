@@ -1,6 +1,6 @@
 function Invoke-Loop {
     param(
-        [int]$seconds,
+        [int]$seconds = 5,
         [scriptblock]$action
     )
 
@@ -13,3 +13,5 @@ function Invoke-Loop {
         timer $seconds
     }
 }
+
+Set-Alias loop Invoke-Loop

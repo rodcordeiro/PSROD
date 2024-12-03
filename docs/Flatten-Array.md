@@ -5,7 +5,7 @@ online version: https://github.com/fleschutz/PowerShell
 schema: 2.0.0
 ---
 
-# Get-Repositories
+# Flatten-Array
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
@@ -13,7 +13,7 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Get-Repositories [-AsJson] [<CommonParameters>]
+Flatten-Array [[-array] <Object>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,16 +30,16 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -AsJson
-{{ Fill AsJson Description }}
+### -array
+{{ Fill array Description }}
 
 ```yaml
-Type: SwitchParameter
+Type: Object
 Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Nomeado
+Position: 0
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

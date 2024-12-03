@@ -1,7 +1,7 @@
 ---
 external help file: psrod-help.xml
-Module Name:
-online version: https://github.com/fleschutz/PowerShell
+Module Name: psrod
+online version: https://github.com/rodcordeiro/PSROD/blob/main/Public/Authoral/Preventive.ps1
 schema: 2.0.0
 ---
 

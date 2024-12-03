@@ -1,6 +1,6 @@
 ---
 external help file: psrod-help.xml
-Module Name:
+Module Name: psrod
 online version: https://github.com/fleschutz/PowerShell
 schema: 2.0.0
 ---

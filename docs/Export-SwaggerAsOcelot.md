@@ -1,98 +1,67 @@
 ---
-external help file: rod-help.xml
+external help file: psrod-help.xml
 Module Name: psrod
 online version: https://github.com/rodcordeiro/PSROD/blob/main/Public/Authoral/Discord.ps1
 schema: 2.0.0
 ---
 
-# Discord
+# Export-SwaggerAsOcelot
 
 ## SYNOPSIS
-Sends a discord message through webhook
+{{ Fill in the Synopsis }}
 
 ## SYNTAX
 
 ```
-Discord [[-Content] <String>] [[-Username] <String>] [[-Avatar] <String>] [[-Webhook] <String>] [-Silent]
- [<CommonParameters>]
+Export-SwaggerAsOcelot [-Porta] <Int32> [-Chave] <String> [-Prod] [-ReturnAsObject] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Calls a discord wehbook, sending text content through it.
+{{ Fill in the Description }}
 
 ## EXAMPLES
 
-### EXEMPLO 1
+### Example 1
+```powershell
+PS C:\> {{ Add example code here }}
 ```
-./Discord -Content 'Some hello'
-```
+
+{{ Add example description here }}
 
 ## PARAMETERS
 
-### -Content
-Content of the message
+### -Chave
+{{ Fill Chave Description }}
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: 1
 Default value: None
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -Username
-Username that sent the message.
-Defaults to: Lord Vader
+### -Porta
+{{ Fill Porta Description }}
 
 ```yaml
-Type: String
+Type: Int32
 Parameter Sets: (All)
 Aliases:
 
-Required: False
-Position: 2
+Required: True
+Position: 0
 Default value: None
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -Avatar
-User avatar url.
-Defaults to: Lord vader image.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 3
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -Webhook
-{{ Fill Webhook Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 4
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -Silent
-{{ Fill Silent Description }}
+### -Prod
+{{ Fill Prod Description }}
 
 ```yaml
 Type: SwitchParameter
@@ -100,8 +69,23 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
-Default value: False
+Position: Nomeado
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ReturnAsObject
+{{ Fill ReturnAsObject Description }}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Nomeado
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -111,13 +95,13 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### System.Int32
+
+### System.String
+
 ## OUTPUTS
 
+### System.Object
 ## NOTES
-Author: Rodrigo M.
-Cordeiro
 
 ## RELATED LINKS
-
-[https://github.com/rodcordeiro/PSROD/blob/main/Public/Authoral/Discord.ps1](https://github.com/rodcordeiro/PSROD/blob/main/Public/Authoral/Discord.ps1)
-

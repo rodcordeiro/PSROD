@@ -12,3 +12,4 @@
         $narrador.Dispose()
     }
 }
+Set-Alias tts Invoke-TextToSpeech

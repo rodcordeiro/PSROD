@@ -1,11 +1,11 @@
 ---
 external help file: psrod-help.xml
 Module Name: psrod
-online version: https://github.com/fleschutz/PowerShell
+online version: http://gallery.technet.microsoft.com/Get-UserSessions-Parse-b4c97837
 schema: 2.0.0
 ---
 
-# Get-Repositories
+# Invoke-TextToSpeech
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
@@ -13,7 +13,7 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Get-Repositories [-AsJson] [<CommonParameters>]
+Invoke-TextToSpeech [-texto] <String[]> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,16 +30,16 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -AsJson
-{{ Fill AsJson Description }}
+### -texto
+{{ Fill texto Description }}
 
 ```yaml
-Type: SwitchParameter
+Type: String[]
 Parameter Sets: (All)
 Aliases:
 
-Required: False
-Position: Nomeado
+Required: True
+Position: 0
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -50,7 +50,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### Nenhum
+### System.String[]
 
 ## OUTPUTS
 

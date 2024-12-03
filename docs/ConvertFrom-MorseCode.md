@@ -1,47 +1,45 @@
 ---
 external help file: psrod-help.xml
 Module Name: psrod
-online version: https://github.com/fleschutz/PowerShell
+online version: https://github.com/jeffpatton1971/mod-posh/wiki/MySQL#Connect-MySqlServer
 schema: 2.0.0
 ---
 
-# Get-Repositories
+# ConvertFrom-MorseCode
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Writes text from Morse code
 
 ## SYNTAX
 
 ```
-Get-Repositories [-AsJson] [<CommonParameters>]
+ConvertFrom-MorseCode [-MorseCode] <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+This PowerShell script writes text from Morse code.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXEMPLO 1
 ```
-
-{{ Add example description here }}
+./ConvertFrom-MorseCode "._. ___ _..   _._. ___ ._. _.. . .. ._. ___"
+```
 
 ## PARAMETERS
 
-### -AsJson
-{{ Fill AsJson Description }}
+### -MorseCode
+{{ Fill MorseCode Description }}
 
 ```yaml
-Type: SwitchParameter
+Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
-Position: Nomeado
+Required: True
+Position: 1
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -50,11 +48,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### Nenhum
-
 ## OUTPUTS
 
-### System.Object
 ## NOTES
+Author: Rodrigo Cordeiro.
+   Reference: \[Markus Fleschutz\](https://github.com/fleschutz/PowerShell)
 
 ## RELATED LINKS
