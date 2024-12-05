@@ -1,7 +1,7 @@
 ---
 external help file: psrod-help.xml
 Module Name: psrod
-online version: https://github.com/rodcordeiro/PSROD/blob/main/Public/Authoral/CalcularSaida.ps1
+online version: https://github.com/jeffpatton1971/mod-posh/wiki/MySQL#Connect-MySqlServer
 schema: 2.0.0
 ---
 
@@ -22,7 +22,7 @@ Confirm-Choice [[-Title] <String>] [-PromptMessage] <String> [<CommonParameters>
 ## EXAMPLES
 
 ### Example 1
-```powershell
+```
 PS C:\> {{ Add example code here }}
 ```
 
@@ -66,11 +66,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### Nenhum
-
 ## OUTPUTS
 
 ### boolean
-
 ## NOTES
 
 ## RELATED LINKS

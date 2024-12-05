@@ -23,7 +23,7 @@ ConvertTo-MarkdownTable [-Columns] <String[]> [[-RowsLabel] <String[]>] [-Rows] 
 ## EXAMPLES
 
 ### Example 1
-```powershell
+```
 PS C:\> {{ Add example code here }}
 ```
 
@@ -97,11 +97,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.String[]
-
 ### System.Management.Automation.PSObject[]
-
 ### System.String
-
 ## OUTPUTS
 
 ### System.Object

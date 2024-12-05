@@ -15,7 +15,6 @@ Writes out calendar elements, either a single month or an entire year depending 
 ```
 Write-Calendar [[-Month] <Int32>] [[-Year] <Int32>] [-ShowHolidays] [-ObservedHolidays]
  [[-DateColors] <ConsoleColor[]>] [[-TodayColors] <ConsoleColor[]>] [[-HolidayColors] <ConsoleColor[]>]
- [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -160,9 +159,6 @@ Default value: @([ConsoleColor]::White, [ConsoleColor]::DarkCyan)
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
-
-### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

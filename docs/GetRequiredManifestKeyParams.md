@@ -1,5 +1,5 @@
 ---
-external help file: rod-help.xml
+external help file: psrod-help.xml
 Module Name: psrod
 online version: https://github.com/fleschutz/PowerShell
 schema: 2.0.0
