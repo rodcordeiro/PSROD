@@ -8,3 +8,4 @@ function Get-GoogleAnswer {
     # Abre uma pesquisa com o termo que deu erro
     Start-Process "https://www.google.com/search?q=$mensagemErro"
 }
+Set-Alias '??' Get-GoogleAnswer
