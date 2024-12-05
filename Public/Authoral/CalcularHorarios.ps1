@@ -1,4 +1,4 @@
-Function CalcularHorarios {
+﻿Function CalcularHorarios {
     <#
     .SYNOPSIS
         Calculates exit time
@@ -34,7 +34,7 @@ Function CalcularHorarios {
 
         Function CalcTimer {
             param([datetime]$Hora)
-            return $Hora.Hour * 60 + $Hora.Minute 
+            return $Hora.Hour * 60 + $Hora.Minute
         }
         Function GetTime {
             param([int]$Hora)
@@ -54,7 +54,7 @@ Function CalcularHorarios {
 
     }
     Process {
-        
+
         $Entrada_MinuteSpan = $(CalcTimer -Hora $Entrada)
         if ($CALCULATE_LUNCH_TIME) {
             $ESTIMATED_LUNCH_TIME = $(GetTime $(CalcTimer -Hora $Entrada.AddHours(4)))
@@ -65,7 +65,7 @@ Function CalcularHorarios {
 
             $Almoco_MinuteSpan = $(CalcTimer -Hora $Almoco)
             $Retorno_MinuteSpan = $(CalcTimer -Hora $Retorno)
-        
+
             $FirstRound = $($HOURS_PER_DAY - ($Almoco_MinuteSpan - $Entrada_MinuteSpan))
 
             $ExitEstimated = $($Retorno_MinuteSpan + $FirstRound)
@@ -74,7 +74,7 @@ Function CalcularHorarios {
                 Write-Output $ExitTime
                 return
             }
-        
+
             Write-Output "O Horario de saida sera: $($ExitTime.Hour):$(([string]$ExitTime.Minute).PadLeft(2,'0'))"
         }
     }

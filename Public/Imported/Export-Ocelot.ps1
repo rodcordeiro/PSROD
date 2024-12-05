@@ -1,4 +1,4 @@
-function Export-SwaggerAsOcelot {
+﻿function Export-SwaggerAsOcelot {
     param(
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [int]$Porta,
@@ -9,13 +9,13 @@ function Export-SwaggerAsOcelot {
     )
 
     begin {
-        $url = "backend.torratorra.com.br"  
+        $url = "backend.torratorra.com.br"
         if (!$Prod) {
-            $url = "hml.backend.torratorra.com.br"  
-            
-        } 
+            $url = "hml.backend.torratorra.com.br"
+
+        }
         # Define the OpenAPI endpoint URL
-        $openApiUrl = "http://$($url):$($Porta)/swagger/v1/swagger.json" 
+        $openApiUrl = "http://$($url):$($Porta)/swagger/v1/swagger.json"
         # Output JSON file
         $outputFile = "$Chave.json"
     }
@@ -74,11 +74,11 @@ function Export-SwaggerAsOcelot {
             }
         }
     }
- 
+
     end {
         # Convert to JSON
         $jsonOutput = $dictionary | ConvertTo-Json -Depth 10 -Compress
-        
+
         if ($ReturnAsObject) { return $dictionary }
 
         # Write the JSON output to a file
@@ -97,7 +97,7 @@ class OcelotEntryKeys {
     [string]$Chave
 }
 
-function Export-OcelotEntries {
+function Export-OcelotEntry {
     param(
         [OcelotEntryKeys[]]$keys,
         [switch]$Prod
@@ -138,7 +138,7 @@ $_"
 
         $dictionary.Routes = Flatten-Array $dictionary.Routes
         $jsonOutput = $dictionary | ConvertTo-Json -Depth 10 -Compress
-        
+
         # Write the JSON output to a file
         try {
             Set-Content -Path ocelot.json -Value $jsonOutput -Force

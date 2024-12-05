@@ -1,4 +1,4 @@
-function Show-BalloonTip
+﻿function Show-BalloonTip
 {
 	[OutputType([void])]
 	[CmdletBinding(DefaultParameterSetName = 'IconFilePath')]
@@ -29,7 +29,7 @@ function Show-BalloonTip
 	try {
 
 		$balloon = New-Object System.Windows.Forms.NotifyIcon
-		
+
 		if ($IconFilePath) {
 			$icon = $IconFilePath
 		}

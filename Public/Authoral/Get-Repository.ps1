@@ -1,8 +1,7 @@
-
-
-
-function Get-Repositories {
-    param([Switch]$AsJson)
+﻿function Get-Repository {
+    param(
+        [Switch]$AsJson = $false
+    )
     $CurrentLocation = $PWD
     $projectFolders = $(Get-ChildItem -Path "~/projetos" -depth 0 -Recurse)
     $repos = $($projectFolders | ForEach-Object {
@@ -12,7 +11,7 @@ function Get-Repositories {
             $folders | ForEach-Object {
                 $folder = $_
                 Set-Location $folder
-                $git = isInsideGit
+                if ((Get-isInsideGit) -eq $False) { continue }
                 if ($(git remote -v | Select-String 'fetch')) {
                     $remote = $($(git remote -v | Select-String 'fetch').ToString().split('')[1])
                     $branches = $(git branches | select-string -Pattern "  remotes")
@@ -22,7 +21,7 @@ function Get-Repositories {
                     #     "branches" = @($branches | select-string -Pattern "HEAD" -NotMatch | ForEach-Object { $_.ToString().Replace("  remotes/origin/", '') });
                     #     "alias"    = "$(Split-Path -Path $(Resolve-Path -Path $folder) -Leaf)"
                     # }
-        
+
                     $result.repo = "$remote";
                     $result.branches = @($branches | select-string -Pattern "HEAD" -NotMatch | ForEach-Object { $_.ToString().Replace("  remotes/origin/", '') });
                     $result.alias = "$(Split-Path -Path $(Resolve-Path -Path $folder) -Leaf)"
@@ -30,15 +29,11 @@ function Get-Repositories {
                     $repositories += $result
                 }
             }
-            # $data = [Repositories]@{
-            #     "Parent" = "~/projetos/$_";
-            #     "repos"  = $($repositories | ConvertTo-Json)
-            # }
+
             $folderRepos = [Repositories]::new()
             $folderRepos.Parent = "~/projetos/$_";
             $folderRepos.repos = $repositories
             $folderRepos
-            # $data
         })
     Set-Location $CurrentLocation
     if ($AsJson) {

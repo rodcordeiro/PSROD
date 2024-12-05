@@ -1,4 +1,4 @@
-Function CalcularSaida {
+﻿Function CalcularSaida {
     <#
     .SYNOPSIS
         Calculates exit time
@@ -36,7 +36,7 @@ Function CalcularSaida {
 
         Function CalcTimer {
             param([datetime]$Hora)
-            return $Hora.Hour * 60 + $Hora.Minute 
+            return $Hora.Hour * 60 + $Hora.Minute
         }
 
         # $TOTAL_MINUTES_PER_DAY = $(24 * 60)
@@ -44,11 +44,11 @@ Function CalcularSaida {
 
     }
     Process {
-        
+
         $Entrada_MinuteSpan = $(CalcTimer -Hora $Entrada)
         $Almoco_MinuteSpan = $(CalcTimer -Hora $Almoco)
         $Retorno_MinuteSpan = $(CalcTimer -Hora $Retorno)
-        
+
         $FirstRound = $($HOURS_PER_DAY - ($Almoco_MinuteSpan - $Entrada_MinuteSpan))
 
         $ExitEstimated = $($Retorno_MinuteSpan + $FirstRound)
@@ -57,9 +57,9 @@ Function CalcularSaida {
             Write-Output $ExitTime
             return
         }
-        
+
         Write-Output "O Horario de saida sera: $($ExitTime.Hour):$($ExitTime.Minute)"
- 	
-        
+
+
     }
 }

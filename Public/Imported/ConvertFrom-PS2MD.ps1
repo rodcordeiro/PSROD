@@ -1,4 +1,4 @@
-Function ConvertFrom-PS2MD {
+﻿Function ConvertFrom-PS2MD {
     <#
 .SYNOPSIS
 	Converts the comment-based help of a PowerShell script to Markdown
@@ -58,7 +58,7 @@ Function ConvertFrom-PS2MD {
         if ($filename -eq "") { $filename = read-host "Enter path to PowerShell script" }
         $ScriptName = (get-item "$filename").Name
 
-        $full = Get-Help $filename -Full 
+        $full = Get-Help $filename -Full
 
         "## $ScriptName - $($full.Synopsis)"
 
@@ -78,7 +78,7 @@ Function ConvertFrom-PS2MD {
         }
 
         foreach ($parameter in $full.parameters.parameter) {
-            "$(((($parameter | Out-String).Trim() -split "`r`n")[-5..-1] | % { $_.Trim() }) -join "`r`n")"
+            "$(((($parameter | Out-String).Trim() -split "`r`n")[-5..-1] | ForEach-Object { $_.Trim() }) -join "`r`n")"
             ""
         }
         "[<CommonParameters>]"

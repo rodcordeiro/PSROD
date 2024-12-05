@@ -1,4 +1,4 @@
-
+﻿
 function ConvertFrom-MorseCode {
     <#
 .SYNOPSIS
@@ -21,7 +21,7 @@ function ConvertFrom-MorseCode {
 
     begin {
         if (!$MorseCode) { throw "MorseCode is required" }
-     
+
         $MorseToText = @{
             "._"    = "A";
             "_..."  = "B";
@@ -70,16 +70,16 @@ function ConvertFrom-MorseCode {
         $DecodedText = $Words | ForEach-Object {
 
             $Characters = $_ -split " "
- 
+
             return ($Characters | ForEach-Object {
                     if ($null -ne $MorseToText[$_]) { $MorseToText[$_] } else { "?" }
                 }) -join ""
         }
- 
+
     }
 
-    end { 
-        Write-Host ($DecodedText -join " ") 
+    end {
+        Write-Output ($DecodedText -join " ")
     }
 }
 

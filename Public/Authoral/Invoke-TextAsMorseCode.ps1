@@ -1,30 +1,30 @@
-function Invoke-TextAsMorseCode {
+﻿function Invoke-TextAsMorseCode {
     param(
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName)]    
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName)]
         [string]
         $text
     )
     begin {
         [int]$speed = 1;
-        
+
         function gap {
             param([int]$Length)
             for ([int]$i = 1; $i -lt $Length; $i++) {
-                Write-Host " " -nonewline
+                Write-Output " " -nonewline
                 continue;
             }
             start-sleep -milliseconds ($Length * $speed)
         }
-    
+
         function dot {
             [console]::beep(440, 150)
-            Write-Host "." -nonewline
+            Write-Output "." -nonewline
             start-sleep -milliseconds $speed # signal
         }
-    
+
         function dash {
             [console]::beep(440, 300)
-            Write-Host "_" -nonewline
+            Write-Output "_" -nonewline
             start-sleep -milliseconds (3 * $speed) # signal
         }
         function Char2MorseCode {
@@ -74,21 +74,21 @@ function Invoke-TextAsMorseCode {
     process {
         try {
             if ($text -eq "" ) { [string]$text = read-host "Enter text to write" }
-    
+
             [char[]]$ArrayOfChars = $text.ToUpper()
             foreach ($Char in $ArrayOfChars) {
-                Char2MorseCode $Char 
+                Char2MorseCode $Char
             }
             # exit 0 # success
-            Write-Host $ArrayOfChars 
+            Write-Output $ArrayOfChars
         }
         catch {
-            "Error in line $($_.InvocationInfo.ScriptLineNumber): $($Error[0])"
+            throw "Error in line $($_.InvocationInfo.ScriptLineNumber): $($Error[0])"
             # exit 1
         }
-        
+
     }
-    
+
 }
 
 

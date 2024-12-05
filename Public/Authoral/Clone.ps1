@@ -1,6 +1,6 @@
-function clone {
-    <# 
-    .SYNOPSIS 
+﻿function clone {
+    <#
+    .SYNOPSIS
         Function to customize repositories cloning with some validations.
     .DESCRIPTION
         Function to customize repositories cloning with some validations. It validates the folder and the repository link.
@@ -24,33 +24,47 @@ function clone {
         clone https://github.com/user/repo.git someTest
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Low')]
     param(
         [parameter(ValueFromPipelineByPropertyName, HelpMessage = "Please, enter the repository link for download")][string]$Path,
         [parameter(ValueFromPipelineByPropertyName, HelpMessage = "Provides you the possibility of changing the destiny folder name.")][string]$Alias,
-        [parameter(ValueFromPipelineByPropertyName, HelpMessage = "Provides you the possibility of cloning the repository on a different folder. Pass the desired folder path.")][string]$Folder,
-        [parameter(HelpMessage = "Please, enter the repository link for download")][Alias('y', 'yes')][Switch] $confirm
+        [parameter(ValueFromPipelineByPropertyName, HelpMessage = "Provides you the possibility of cloning the repository on a different folder. Pass the desired folder path.")][string]$Folder
     )
-
-    if (!$Path) {
-        Throw "You must provide a repository to clone!"
-    }
-
-    $repository = $Path
-    $destiny = if ($Folder) { $Folder } else { $pwd }
-    $localFolder = if ($Alias) { $Alias } else { $(Split-Path -Path $repository -Leaf) }
-
-    $project_paths = ((Resolve-Path -Path '~/projetos').Path)
-    
-    if (!($destiny.Path.Contains($project_paths)) -and !$confirm) {
-        $response = (Confirm-Choice -Title "You're outside of the predefined projects folders" -PromptMessage "Are you sure you want to proceed?")
-        if (!$response) {
-            Throw "Cancelling cloning projects. Have a nice day!"
+    begin {
+        if (-not $PSBoundParameters.ContainsKey('Verbose')) {
+            $VerbosePreference = $PSCmdlet.SessionState.PSVariable.GetValue('VerbosePreference')
+        }
+        if (-not $PSBoundParameters.ContainsKey('Confirm')) {
+            $ConfirmPreference = $PSCmdlet.SessionState.PSVariable.GetValue('ConfirmPreference')
+        }
+        if (-not $PSBoundParameters.ContainsKey('WhatIf')) {
+            $WhatIfPreference = $PSCmdlet.SessionState.PSVariable.GetValue('WhatIfPreference')
         }
     }
+    process {
 
-        
-    if ($folder) { Set-Location $(Resolve-Path -Path $Folder) }
-    git clone $repository $(if ($Alias) { $Alias })
-    Set-Location $(Resolve-Path -Path $localFolder)
-    
+        if (!$Path) {
+            Throw "You must provide a repository to clone!"
+        }
+
+        $repository = $Path
+        $destiny = if ($Folder) { $Folder } else { $pwd }
+        $localFolder = if ($Alias) { $Alias } else { $(Split-Path -Path $repository -Leaf) }
+
+        $project_paths = ((Resolve-Path -Path '~/projetos').Path)
+
+        if (!($destiny.Path.Contains($project_paths)) -and !$confirm) {
+            $response = (Confirm-Choice -Title "You're outside of the predefined projects folders" -PromptMessage "Are you sure you want to proceed?")
+            if (!$response) {
+                Throw "Cancelling cloning projects. Have a nice day!"
+            }
+        }
+
+        if ($PSCmdlet.ShouldProcess((Resolve-Path -Path $folder), "Cloning the repository to the $folder path")) {
+            if ($folder) { Set-Location $(Resolve-Path -Path $Folder) }
+            git clone $repository $(if ($Alias) { $Alias })
+            Set-Location $(Resolve-Path -Path $localFolder)
+        }
+
+    }
 }

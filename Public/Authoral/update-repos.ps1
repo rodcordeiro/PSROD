@@ -1,5 +1,5 @@
-function Update-Repos {
-    
+﻿function Update-Repos {
+
     $folders = Get-Repositories
     Discord -Avatar "https://rodcordeiro.github.io/shares/img/eu.jpg" -Username "Script do rod" -Webhook $env:DISCORD_WEBHOOK -Content "Ignorem. Estou rodando um script de atualizacao automatica dos repositorios"
     for ($i = 0; $i -le ($folders.length - 1); $i += 1) {
@@ -30,7 +30,7 @@ function Update-Repos {
                     }
                     git checkout $branch
                     $branch = $_.ToString().Replace(' ', '').Replace('*', '')
-                    
+
                     git add .
                     git commit -m '[skip ci] Automatic repositories update'
                     git pull origin $branch
@@ -38,7 +38,7 @@ function Update-Repos {
                 }
                 git checkout $currentBranch
 
-                
+
                 # UpdatePDAlib
                 $git_dir = $(Split-Path -Path $(git rev-parse --show-toplevel) -Leaf)
                 $git_index = $PWD.ToString().IndexOf($git_dir)
@@ -46,15 +46,15 @@ function Update-Repos {
 
                 Discord -Avatar "https://rodcordeiro.github.io/shares/img/eu.jpg" -Content "Atualizado o $CmdPromptCurrentFolder" -Username "Script do rod" -Webhook $env:DISCORD_WEBHOOK
             }
-        }    
+        }
     }
-    
+
     # $folders | ForEach-Object {
     #     $folder = $_
     #     $($Folder.repos | ConvertFrom-Json) | ForEach-Object {
     #         $repos = $_
     #         $repo = Resolve-Path -Path "$($folder.Parent)/$($repos.Alias)"
-    #         Write-Output "Repo $repo"    
+    #         Write-Output "Repo $repo"
     #         Set-Location $repo
     #         $git = isInsideGit
     #         if ($git -and $(git remote -v | Select-String 'fetch')) {
@@ -73,7 +73,7 @@ function Update-Repos {
     #                 }
     #                 git checkout $branch
     #                 $branch = $_.ToString().Replace(' ', '')
-                    
+
     #                 git add .
     #                 git commit -m '[skip ci] Automatic repositories update'
     #                 git pull origin $branch
@@ -81,7 +81,7 @@ function Update-Repos {
     #             }
     #             git checkout $currentBranch
 
-                
+
     #             # UpdatePDAlib
     #             $git_dir = $(Split-Path -Path $(git rev-parse --show-toplevel) -Leaf)
     #             $git_index = $PWD.ToString().IndexOf($git_dir)

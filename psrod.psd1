@@ -24,7 +24,7 @@
     # ProcessorArchitecture = ''
     # RequiredModules = @()
     # RequiredAssemblies = @()
-    ScriptsToProcess  = @('private/classes.ps1', 'private/preventiva.ps1')
+    # ScriptsToProcess  = @('private/classes.ps1', 'private/preventiva.ps1')
     # TypesToProcess = @()
     # FormatsToProcess = @()
     NestedModules     = @('Public/Modules/MySQL.psm1')

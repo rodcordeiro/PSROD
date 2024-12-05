@@ -1,4 +1,5 @@
-function ConvertTo-MarkdownTable {
+﻿function ConvertTo-MarkdownTable {
+    [CmdletBinding()]
     param(
         [Parameter(ValueFromPipelineByPropertyName, Mandatory)]
         [ValidateNotNullOrEmpty()]
@@ -11,30 +12,32 @@ function ConvertTo-MarkdownTable {
         [Parameter(ValueFromPipelineByPropertyName, Mandatory = $false)]
         [string]$OutFile
     )
-    $table = @()
-    $table += $(if ($RowsLabel) { '| ' }) + [String]::Join("", $($Columns | foreach-Object { "|$($_)" })) + "|"
-    $table += $(if ($RowsLabel) { '|:- ' }) + [String]::Join("", $($Columns | foreach-Object { "|:-:" })) + "|"
-    if ($RowsLabel) {
-        $table += $RowsLabel | foreach-object {
-            $app = $_ 
-            return "|$app" + [String]::Join("", $($Columns | foreach-Object { "|$($Rows.$_.$app)" })) + "|"
+    process {
+        $table = @()
+        $table += $(if ($RowsLabel) { '| ' }) + [String]::Join("", $($Columns | foreach-Object { "|$($_)" })) + "|"
+        $table += $(if ($RowsLabel) { '|:- ' }) + [String]::Join("", $($Columns | foreach-Object { "|:-:" })) + "|"
+        if ($RowsLabel) {
+            $table += $RowsLabel | foreach-object {
+                $app = $_
+                return "|$app" + [String]::Join("", $($Columns | foreach-Object { "|$($Rows.$_.$app)" })) + "|"
+            }
+
         }
-        
-    }
-    else {
-        $table += $Rows | foreach-object {
-            $row = $_
-            return [String]::Join("", $($Columns | foreach-Object { "|$($row.$_)" })) + "|"
+        else {
+            $table += $Rows | foreach-object {
+                $row = $_
+                return [String]::Join("", $($Columns | foreach-Object { "|$($row.$_)" })) + "|"
+            }
         }
-    }
-    if ($OutFile) {
-        New-Item -Type file -Path $OutFile | Out-Null
-        $table | ForEach-Object {
-            Add-Content  -Path $OutFile -Value $_
+        if ($OutFile) {
+            New-Item -Type file -Path $OutFile | Out-Null
+            $table | ForEach-Object {
+                Add-Content  -Path $OutFile -Value $_
+            }
         }
-    }
-    else {
-        return $table
+        else {
+            return $table
+        }
     }
 
 }

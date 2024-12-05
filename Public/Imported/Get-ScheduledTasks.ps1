@@ -1,10 +1,10 @@
-# Author: Warren Frame
+﻿# Author: Warren Frame
 # Url: https://github.com/RamblingCookieMonster/PowerShell/blob/master/Get-ScheduledTasks.ps1
-function Get-ScheduledTasks {  
+function Get-ScheduledTask {
     <#
     .SYNOPSIS
         Get scheduled task information from a system
-    
+
     .DESCRIPTION
         Get scheduled task information from a system
 
@@ -19,12 +19,12 @@ function Get-ScheduledTasks {
 
     .PARAMETER Recurse
         If specified, recurse through folders below $folder.
-        
+
         Note:  We also recurse if we use SchTasks.exe
 
     .PARAMETER Path
         If specified, path to export XML files
-        
+
         Details:
             Naming scheme is computername-taskname.xml
             Please note that the base filename is used when importing a scheduled task.  Rename these as needed prior to importing!
@@ -34,13 +34,13 @@ function Get-ScheduledTasks {
 
     .PARAMETER CompatibilityMode
         If specified, pull scheduled tasks only with the schtasks.exe command, which works against older systems.
-    
+
         Notes:
             Export is not possible with this switch.
             Recurse is implied with this switch.
-    
+
     .EXAMPLE
-    
+
         #Get scheduled tasks from the root folder of server1 and c-is-ts-91
         Get-ScheduledTasks server1, c-is-ts-91
 
@@ -50,12 +50,12 @@ function Get-ScheduledTasks {
         Get-ScheduledTasks server1 -recurse -Exclude "\\Microsoft\\"
 
     .EXAMPLE
-    
+
         #Get scheduled tasks from all folders on server1, not in a Microsoft folder, and export in XML format (can be used to import scheduled tasks)
         Get-ScheduledTasks server1 -recurse -Exclude "\\Microsoft\\" -path 'D:\Scheduled Tasks'
 
     .NOTES
-    
+
         Properties returned    : When they will show up
             ComputerName       : All queries
             Name               : All queries
@@ -87,8 +87,8 @@ function Get-ScheduledTasks {
     param(
         [parameter(
             ValueFromPipeline = $true,
-            ValueFromPipelineByPropertyName = $true, 
-            ValueFromRemainingArguments = $false, 
+            ValueFromPipelineByPropertyName = $true,
+            ValueFromRemainingArguments = $false,
             Position = 0
         )]
         [Alias("host", "server", "computer")]
@@ -104,7 +104,7 @@ function Get-ScheduledTasks {
         [validatescript({
                 #Test path if provided, otherwise allow $null
                 if ($_) {
-                    Test-Path -PathType Container -path $_ 
+                    Test-Path -PathType Container -path $_
                 }
                 else {
                     $true
@@ -122,9 +122,9 @@ function Get-ScheduledTasks {
 
         if (-not $CompatibilityMode) {
             $sch = New-Object -ComObject Schedule.Service
-        
+
             #thanks to Jaap Brasser - http://gallery.technet.microsoft.com/scriptcenter/Get-Scheduled-tasks-from-3a377294
-            function Get-AllTaskSubFolders {
+            function Get-AllTaskSubFolder {
                 [cmdletbinding()]
                 param (
                     # Set to use $Schedule as default parameter so it automatically list all files
@@ -170,21 +170,21 @@ function Get-ScheduledTasks {
 
                     #Return only unique results
                     $Results = @($ArrFolders) + @($FolderRef)
-                    $UniquePaths = $Results | select -ExpandProperty path -Unique
-                    $Results | ? { $UniquePaths -contains $_.path }
+                    $UniquePaths = $Results | Select-Object -ExpandProperty path -Unique
+                    $Results | Where-Object { $UniquePaths -contains $_.path }
                 }
             } #Get-AllTaskSubFolders
         }
 
-        function Get-SchTasks {
+        function Get-SchTask {
             [cmdletbinding()]
             param([string]$computername, [string]$folder, [switch]$CompatibilityMode)
-            
+
             #we format the properties to match those returned from com objects
             $result = @( schtasks.exe /query /v /s $computername /fo csv |
                 convertfrom-csv |
-                ? { $_.taskname -ne "taskname" -and $_.taskname -match $( $folder.replace("\", "\\") ) } |
-                select @{ label = "ComputerName"; expression = { $computername } },
+                Where-Object { $_.taskname -ne "taskname" -and $_.taskname -match $( $folder.replace("\", "\\") ) } |
+                Select-Object @{ label = "ComputerName"; expression = { $computername } },
                 @{ label = "Name"; expression = { $_.TaskName } },
                 @{ label = "Action"; expression = { $_."Task To Run" } },
                 @{ label = "LastRunTime"; expression = { $_."Last Run Time" } },
@@ -195,7 +195,7 @@ function Get-ScheduledTasks {
 
             if ($CompatibilityMode) {
                 #User requested compat mode, don't add props
-                $result    
+                $result
             }
             else {
                 #If this was a failback, we don't want to affect display of props for comps that don't fail... include empty props expected for com object
@@ -203,28 +203,28 @@ function Get-ScheduledTasks {
                 foreach ($item in $result) {
                     $name = @( $item.Name -split "\\" )[-1]
                     $taskPath = $item.name
-                    $item | select ComputerName, @{ label = "Name"; expression = { $name } }, @{ label = "Path"; Expression = { $taskPath } }, Enabled, Action, Arguments, UserId, LastRunTime, NextRunTime, Status, Author, RunLevel, Description, NumberOfMissedRuns
+                    $item | Select-Object ComputerName, @{ label = "Name"; expression = { $name } }, @{ label = "Path"; Expression = { $taskPath } }, Enabled, Action, Arguments, UserId, LastRunTime, NextRunTime, Status, Author, RunLevel, Description, NumberOfMissedRuns
                 }
             }
         } #Get-SchTasks
-    }    
+    }
     Process {
         #loop through computers
         foreach ($computer in $computername) {
-        
+
             #bool in case com object fails, fall back to schtasks
             $failed = $false
-        
+
             write-verbose "Running against $computer"
             Try {
-            
+
                 #use com object unless in compatibility mode.  Set compatibility mode if this fails
-                if (-not $compatibilityMode) {      
+                if (-not $compatibilityMode) {
 
                     Try {
                         #Connect to the computer
                         $sch.Connect($computer)
-                        
+
                         if ($recurse) {
                             $AllFolders = Get-AllTaskSubFolders -FolderRef $sch.GetFolder($folder) -recurse -ErrorAction stop
                         }
@@ -232,36 +232,36 @@ function Get-ScheduledTasks {
                             $AllFolders = Get-AllTaskSubFolders -FolderRef $sch.GetFolder($folder) -ErrorAction stop
                         }
                         Write-verbose "Looking through $($AllFolders.count) folders on $computer"
-                
+
                         foreach ($fold in $AllFolders) {
-                
+
                             #Get tasks in this folder
                             $tasks = $fold.GetTasks(0)
-                
+
                             Write-Verbose "Pulling data from $($tasks.count) tasks on $computer in $($fold.name)"
                             foreach ($task in $tasks) {
-                            
+
                                 #extract helpful items from XML
-                                $Author = ([regex]::split($task.xml, '<Author>|</Author>'))[1] 
-                                $UserId = ([regex]::split($task.xml, '<UserId>|</UserId>'))[1] 
+                                $Author = ([regex]::split($task.xml, '<Author>|</Author>'))[1]
+                                $UserId = ([regex]::split($task.xml, '<UserId>|</UserId>'))[1]
                                 $Description = ([regex]::split($task.xml, '<Description>|</Description>'))[1]
                                 $Action = ([regex]::split($task.xml, '<Command>|</Command>'))[1]
                                 $Arguments = ([regex]::split($task.xml, '<Arguments>|</Arguments>'))[1]
                                 $RunLevel = ([regex]::split($task.xml, '<RunLevel>|</RunLevel>'))[1]
                                 $LogonType = ([regex]::split($task.xml, '<LogonType>|</LogonType>'))[1]
-                            
+
                                 #convert state to status
-                                Switch ($task.State) { 
-                                    0 { $Status = "Unknown" } 
-                                    1 { $Status = "Disabled" } 
-                                    2 { $Status = "Queued" } 
-                                    3 { $Status = "Ready" } 
-                                    4 { $Status = "Running" } 
+                                Switch ($task.State) {
+                                    0 { $Status = "Unknown" }
+                                    1 { $Status = "Disabled" }
+                                    2 { $Status = "Queued" }
+                                    3 { $Status = "Ready" }
+                                    4 { $Status = "Running" }
                                 }
 
                                 #output the task details
                                 if (-not $exclude -or $task.Path -notmatch $Exclude) {
-                                    $task | select @{ label = "ComputerName"; expression = { $computer } }, 
+                                    $task | Select-Object @{ label = "ComputerName"; expression = { $computer } },
                                     Name,
                                     Path,
                                     Enabled,
@@ -275,7 +275,7 @@ function Get-ScheduledTasks {
                                     @{ label = "RunLevel"; expression = { $RunLevel } },
                                     @{ label = "Description"; expression = { $Description } },
                                     NumberOfMissedRuns
-                            
+
                                     #if specified, output the results in importable XML format
                                     if ($path) {
                                         $xml = $task.Xml
@@ -295,12 +295,12 @@ function Get-ScheduledTasks {
                             Write-Error "Could not pull scheduled tasks from $computer using schtasks.exe:`n$_"
                             Continue
                         }
-                    }             
+                    }
                 }
 
                 #otherwise, use schtasks
                 else {
-                
+
                     Try {
                         Get-SchTasks -computername $computer -folder $folder -CompatibilityMode -ErrorAction stop
                     }

@@ -1,4 +1,4 @@
-function Get-SocketMessage {
+﻿function Get-SocketMessage {
     <#
     .Notes
         https://www.jesusninoc.com/01/02/server-and-client-sockets-tcp/
@@ -16,28 +16,28 @@ function Get-SocketMessage {
     Process {
         #Use the Start method to begin listening for incoming connection requests. Start will queue incoming connections until you either call the Stop method or it has queued MaxConnections. Use either AcceptSocket or AcceptTcpClient to pull a connection from the incoming connection request queue. These two methods will block. If you want to avoid blocking, you can use the Pending method first to determine if connection requests are available in the queue.
         $TcpListener.Start()
-        
+
         While ($keepAlive) {
             $AcceptTcpClient = $TcpListener.AcceptTcpClient()
             $GetStream = $AcceptTcpClient.GetStream()
             $StreamReader = New-Object System.IO.StreamReader $GetStream
             $content = $StreamReader.ReadLine()
-            
+
             $StreamReader.Dispose()
             $GetStream.Dispose()
             $AcceptTcpClient.Dispose()
             Write-Output $content
             if ($content -eq 'quit') {
                 $keepAlive = $False
-            }    
+            }
         }
     }
     End {
         $StreamReader.Dispose()
         $GetStream.Dispose()
         $AcceptTcpClient.Dispose()
-            
+
         #Call the Stop method to close the TcpListener.
         $TcpListener.Stop()
-    }    
+    }
 }
