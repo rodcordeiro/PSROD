@@ -1,13 +1,13 @@
-# https://raw.githubusercontent.com/adbertram/Random-PowerShell-Work/master/PowerShell%20Gallery/Publish-PowerShellGalleryModule.ps1
+﻿# https://raw.githubusercontent.com/adbertram/Random-PowerShell-Work/master/PowerShell%20Gallery/Publish-PowerShellGalleryModule.ps1
 
 function ShowMenu {
 	<#
 		.SYNOPSIS
 			A helper function to display a menu when a test fails.
-	
+
 		.EXAMPLE
 			PS> ShowMenu -Title 'What to do' -ChoiceMessage 'Should I do it?'
-	
+
 	#>
 	[CmdletBinding()]
 	param
@@ -44,10 +44,10 @@ function GetRequiredManifestKeyParams {
 	<#
 		.SYNOPSIS
 			A helper function to retrieve values for the required manifest keys from the user.
-	
+
 		.EXAMPLE
 			PS> GetRequiredManifestKeyParams
-	
+
 	#>
 	[CmdletBinding()]
 	param
@@ -56,7 +56,7 @@ function GetRequiredManifestKeyParams {
 		[ValidateNotNullOrEmpty()]
 		[string[]]$RequiredKeys = @('Description', 'Version', 'ProjectUri', 'Author')
 	)
-	
+
 	$paramNameMap = @{
 		Version     = 'ModuleVersion'
 		Description = 'Description'
@@ -87,8 +87,8 @@ function Invoke-Test {
 		[ValidateNotNullOrEmpty()]
 		[object]$Module
 	)
-	
-	$testHt = $moduleTests | where { $_.TestName -eq $TestName }
+
+	$testHt = $moduleTests | Where-Object { $_.TestName -eq $TestName }
 	$actionName = '{0}{1}' -f $Action, 'Action'
 	& $testHt.$actionName -Module $Module
 }
@@ -105,13 +105,13 @@ function Publish-PowerShellGalleryModule {
 			all official requirements but also performs a couple extra tests. It's purpose is to provide a foundation to
 			add upon to for your own "requirements" for the Gallery.
 
-			Each run will ensure a module manifest is in the same folder as the ModuleFilePath and will ensure that manifest 
+			Each run will ensure a module manifest is in the same folder as the ModuleFilePath and will ensure that manifest
 			has all of the required keys. Also, it will run Test-ModuleManifest to ensure the result passes there as well.
 
 		.EXAMPLE
 			PS> Publish-PowerShellGalleryModule -ModuleFilePath C:\Foo\Foo.psm1 -NuGetApiKey XXXXXXXXX
 
-			This example will check the Foo module for all pre-defined requirements and fix as necessary. 
+			This example will check the Foo module for all pre-defined requirements and fix as necessary.
 
 		.EXAMPLE
 			PS> Publish-PowerShellGalleryModule -ModuleFilePath C:\Modules\Foo.psm1 -RunOptionalTests
@@ -119,7 +119,7 @@ function Publish-PowerShellGalleryModule {
 			This example assumes that you've included a default value for the NuGetApiKey.
 
 		.PARAMETER ModuleFilePath
-			A mandatory string parameter representing the file path to a PSM1 file. The folder path also represents the 
+			A mandatory string parameter representing the file path to a PSM1 file. The folder path also represents the
 			folder that will be searched for a matching module manifest as well.
 
 		.PARAMETER RunOptionalTests
@@ -167,7 +167,7 @@ function Publish-PowerShellGalleryModule {
 		[switch]$PublishToGallery
 	)
 
-	<# 
+	<#
 	Here are all of the individual tests. This is where you can add additional mandatory or optional tests depending on the
 	value of the Mandatory key. To add a test, add a hashtable with the same key values. Any test marked as Mandatory will
 	always run. Any test marked as Optional will only run with the -RunOptionalTests parameter is used.
@@ -178,7 +178,7 @@ function Publish-PowerShellGalleryModule {
 			Mandatory      = $true
 			FailureMessage = 'The module manifest does not exist at the expected path.'
 			FixMessage     = 'Run New-ModuleManifest to create a new manifest'
-			FixAction      = { 
+			FixAction      = {
 				param($Module)
 
 				## Gather up all of the requuired key values from the user
@@ -205,7 +205,7 @@ function Publish-PowerShellGalleryModule {
 			Mandatory      = $true
 			FailureMessage = 'The module manifest does not have all the required keys populated.'
 			FixMessage     = 'Run Update-ModuleManifest to update existing manifest'
-			FixAction      = { 
+			FixAction      = {
 				param($Module)
 
 				## Have to get the module from the file system again here in case it was just created with New-ModuleManifest
@@ -224,10 +224,10 @@ function Publish-PowerShellGalleryModule {
 			TestAction     = {
 				param($Module)
 
-				## Have to get the module again here to either update any new keys New-ModuleManifest just created or, since the 
+				## Have to get the module again here to either update any new keys New-ModuleManifest just created or, since the
 				## module was originally passed as a PSM1, it has no idea of an already existing manifest anyway.
 				$Module = Get-Module -Name $Module.Path -ListAvailable
-					
+
 				if ($Module.PsObject.Properties | Where-Object -FilterScript { $_.Name -in @('Description', 'Author', 'Version') -and (-not $_.Value) }) {
 					$false
 				} elseif ((-not $Module.LicenseUri) -and (-not $Module.PrivateData.PSData.ProjectUri)) {
@@ -260,7 +260,7 @@ function Publish-PowerShellGalleryModule {
 			Mandatory      = $false
 			FailureMessage = 'The module does not have any associated Pester tests.'
 			FixMessage     = 'Create a new Pester test file using a common template'
-			FixAction      = { 
+			FixAction      = {
 				param($Module)
 
 				## Create a $ModuleName.Tests.ps1 file using a template inside of the module folder creating a Describe block
@@ -269,10 +269,10 @@ function Publish-PowerShellGalleryModule {
 				$publicFunctionNames = (Get-Command -Module $Module).Name
 
 				$templateFuncs = ''
-				$templateFuncs += $publicFunctionNames | foreach {
+				$templateFuncs += $publicFunctionNames | ForEach-Object {
 					@"
 		describe '$_' {
-			
+
 		}
 
 "@
@@ -288,7 +288,7 @@ Get-Module -Name $ThisModuleName -All | Remove-Module -Force
 
 Import-Module -Name $ThisModule -Force -ErrorAction Stop
 
-## If a module is in $Env:PSModulePath and $ThisModule is not, you will have two modules loaded when importing and 
+## If a module is in $Env:PSModulePath and $ThisModule is not, you will have two modules loaded when importing and
 ## InModuleScope does not like that. 0.0 will always be the one imported directly from PSM1.
 @(Get-Module -Name $ThisModuleName).where({{ $_.version -ne "0.0" }}) | Remove-Module -Force
 #endregion
@@ -316,8 +316,8 @@ InModuleScope $ThisModuleName {{
 
 		if (-not $NuGetApiKey) {
 			throw @"
-The NuGet API key was not found in the NuGetAPIKey parameter. In order to publish to the PowerShell Gallery this key is required. 
-Go to https://www.powershellgallery.com/users/account/LogOn?returnUrl=%2F for instructions on registering an account and obtaining 
+The NuGet API key was not found in the NuGetAPIKey parameter. In order to publish to the PowerShell Gallery this key is required.
+Go to https://www.powershellgallery.com/users/account/LogOn?returnUrl=%2F for instructions on registering an account and obtaining
 a NuGet API key.
 "@
 		}
@@ -326,15 +326,15 @@ a NuGet API key.
 
 		## Force the manifest to show up if it exists. This is done as an easy way to bring along a manifest reference
 		$module | Add-Member -MemberType NoteProperty -Name 'Path' -Value "$($module.ModuleBase)\$($Module.Name).psd1" -Force
-		
+
 		if ($RunOptionalTests.IsPresent) {
 			$whereFilter = { '*' }
 		} else {
 			$whereFilter = { $_.Mandatory }
 		}
 
-		foreach ($test in ($moduleTests | where $whereFilter)) {
-			if (-not (Invoke-Test -TestName $test.TestName -Action 'Test' -Module $module)) {			
+		foreach ($test in ($moduleTests | Where-Object $whereFilter)) {
+			if (-not (Invoke-Test -TestName $test.TestName -Action 'Test' -Module $module)) {
 				$result = ShowMenu -Title $test.FailureMessage -ChoiceMessage "Would you like to resolve this with action: [$($test.FixMessage)]?"
 				switch ($result) {
 					0 {
@@ -361,7 +361,7 @@ a NuGet API key.
 				0 {
 					& $publishAction
 				}
-				1 { 
+				1 {
 					Write-Host "Postponing publishing. When ready, use this syntax: Publish-Module -Name $($module.Name) -NuGetApiKey $NuGetApiKey"
 				}
 			}

@@ -1,5 +1,5 @@
-# Author: Microsoft
-# URL: 
+﻿# Author: Microsoft
+# URL:
 
 function Show-Calendar {
     <#
@@ -46,23 +46,23 @@ function Show-Calendar {
         [int[]] $highlightDay,
         [string[]] $highlightDate = [DateTime]::Today
     )
-    
+
     ## Determine the first day of the start and end months.
     $start = New-Object DateTime $start.Year, $start.Month, 1
     $end = New-Object DateTime $end.Year, $end.Month, 1
-    
+
     ## Convert the highlighted dates into real dates.
     [DateTime[]] $highlightDate = [DateTime[]] $highlightDate
-    
+
     ## Retrieve the DateTimeFormat information so that the
     ## calendar can be manipulated.
     $dateTimeFormat = (Get-Culture).DateTimeFormat
     if ($firstDayOfWeek) {
         $dateTimeFormat.FirstDayOfWeek = $firstDayOfWeek
     }
-    
+
     $currentDay = $start
-    
+
     ## Process the requested months.
     while ($start -le $end) {
         ## Return to an earlier point in the function if the first day of the month
@@ -70,12 +70,12 @@ function Show-Calendar {
         while ($currentDay.DayOfWeek -ne $dateTimeFormat.FirstDayOfWeek) {
             $currentDay = $currentDay.AddDays(-1)
         }
-    
+
         ## Prepare to store information about this date range.
         $currentWeek = New-Object PsObject
         $dayNames = @()
         $weeks = @()
-    
+
         ## Continue processing dates until the function reaches the end of the month.
         ## The function continues until the week is completed with
         ## days from the next month.
@@ -86,10 +86,10 @@ function Show-Calendar {
             if ($dayNames -notcontains $dayName) {
                 $dayNames += $dayName
             }
-    
+
             ## Pad the day number for display, highlighting if necessary.
             $displayDay = " {0,2} " -f $currentDay.Day
-    
+
             ## Determine whether to highlight a specific date.
             if ($highlightDate) {
                 $compareDate = New-Object DateTime $currentDay.Year,
@@ -98,19 +98,19 @@ function Show-Calendar {
                     $displayDay = "*" + ("{0,2}" -f $currentDay.Day) + "*"
                 }
             }
-    
+
             ## Otherwise, highlight as part of a date range.
             if ($highlightDay -and ($highlightDay[0] -eq $currentDay.Day)) {
                 $displayDay = "[" + ("{0,2}" -f $currentDay.Day) + "]"
                 $null, $highlightDay = $highlightDay
             }
-    
+
             ## Add the day of the week and the day of the month as note properties.
             $currentWeek | Add-Member NoteProperty $dayName $displayDay
-    
+
             ## Move to the next day of the month.
             $currentDay = $currentDay.AddDays(1)
-    
+
             ## If the function reaches the next week, store the current week
             ## in the week list and continue.
             if ($currentDay.DayOfWeek -eq $dateTimeFormat.FirstDayOfWeek) {
@@ -118,19 +118,19 @@ function Show-Calendar {
                 $currentWeek = New-Object PsObject
             }
         }
-    
+
         ## Format the weeks as a table.
         $calendar = $weeks | Format-Table $dayNames -AutoSize | Out-String
-    
+
         ## Add a centered header.
         $width = ($calendar.Split("`n") | Measure-Object -Maximum Length).Maximum
         $header = "{0:MMMM yyyy}" -f $start
         $padding = " " * (($width - $header.Length) / 2)
         $displayCalendar = " `n" + $padding + $header + "`n " + $calendar
         $displayCalendar.TrimEnd()
-    
+
         ## Move to the next month.
         $start = $start.AddMonths(1)
-    
+
     }
 }

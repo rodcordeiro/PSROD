@@ -1,4 +1,4 @@
-Function Find-OpenPorts {
+﻿Function Find-OpenPort {
     <#
 .SYNOPSIS
 	Scans the network for open/closed ports
@@ -36,8 +36,8 @@ Function Find-OpenPorts {
                 }
                 if (Test-Connection -BufferSize 32 -Count 1 -quiet -ComputerName $ip) {
                     $Details.Connected = $True;
-                    $AvailablePorts = @();                    
-                    
+                    $AvailablePorts = @();
+
                     foreach ($port in $Ports) {
                         $socket = new-object System.Net.Sockets.TcpClient($ip, $port)
                         if ($socket.Connected) {
@@ -63,8 +63,8 @@ Function Find-OpenPorts {
                 }
                 if (Test-Connection -BufferSize 32 -Count 1 -quiet -ComputerName $ip) {
                     $Details.Connected = $True;
-                    $AvailablePorts = @();                    
-                    
+                    $AvailablePorts = @();
+
                     foreach ($port in $Ports) {
                         $socket = new-object System.Net.Sockets.TcpClient($ip, $port)
                         if ($socket.Connected) {

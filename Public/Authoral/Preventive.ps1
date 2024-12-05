@@ -1,4 +1,4 @@
-Function Preventiva() {
+﻿Function Preventiva() {
     <#
     .SYNOPSIS
         Execute preventive scripts
@@ -14,9 +14,9 @@ Function Preventiva() {
         Executa a instalação de atualizações;
     .PARAMETER Reboot
         Reinicia o computador ao finalizar a execução do script
-    
+
     .EXAMPLE
-        PS> ./Preventiva 
+        PS> ./Preventiva
     .EXAMPLE
         PS> ./Preventiva -Complete
     .EXAMPLE
@@ -41,7 +41,7 @@ Function Preventiva() {
     )
 
     $action = [Manutencao]::new()
-    
+
     if ($Complete) {
         $action.repair();
         $action.Updates($Reboot);

@@ -1,29 +1,27 @@
-﻿try
-{
+﻿try {
     $ErrorActionPreference = "Stop";
-    [System.Reflection.Assembly]::LoadWithPartialName("MySql.Data") |Out-Null;
+    [System.Reflection.Assembly]::LoadWithPartialName("MySql.Data") | Out-Null;
     $Global:MySQLConnection = $null;
-    }
-catch
-{
+}
+catch {
     Write-Error "MySQL Connector for .NET not installed, please visit http://dev.mysql.com/downloads/connector/net/6.4.html";
     break
-    }
-Function Connect-MySqlServer
-{
+}
+
+Function Connect-MySqlServer {
     <#
         .SYNOPSIS
             Connect to a MySQL Server
         .DESCRIPTION
-            This function will establish a connection to a local or remote instance of 
-            a MySQL Server. By default it will connect to the local instance on the 
+            This function will establish a connection to a local or remote instance of
+            a MySQL Server. By default it will connect to the local instance on the
             default port.
         .PARAMETER ComputerName
             The name of the remote computer to connect to, otherwise default to localhost
         .PARAMETER Port
             By default this is 3306, otherwise specify the correct value
         .PARAMETER Credential
-            Typically this may be your root credentials, or to work in a specific 
+            Typically this may be your root credentials, or to work in a specific
             database the credentials with appropriate rights to do work in that database.
         .PARAMETER Database
             An optional parameter that will connect you to a specific database
@@ -49,7 +47,7 @@ Function Connect-MySqlServer
 
             Description
             -----------
-            Connect to the local mysql instance as root. This example uses the 
+            Connect to the local mysql instance as root. This example uses the
             Get-Credential cmdlet to prompt for username and password.
         .EXAMPLE
             Connect-MySqlServer -ComputerName db.company.com -Credential (Get-Credential)
@@ -73,7 +71,7 @@ Function Connect-MySqlServer
 
             Description
             -----------
-            Connect to a remote mysql instance as root. This example uses the 
+            Connect to a remote mysql instance as root. This example uses the
             Get-Credential cmdlet to prompt for username and password.
         .NOTES
             FunctionName : Connect-MySqlServer
@@ -84,54 +82,45 @@ Function Connect-MySqlServer
     #>
     [CmdletBinding()]
     Param
-        (
+    (
         [string]$ComputerName = "localhost",
         [int]$Port = 3306,
         [parameter(Mandatory = $true)]
         [System.Management.Automation.PSCredential]$Credential,
         [string]$Database
-        )
-    Begin
-    {
+    )
+    Begin {
         Write-Verbose "Build connection string";
-        if ($Database)
-        {
+        if ($Database) {
             $ConnectionString = "server=$($ComputerName);port=$($Port);uid=$($Credential.UserName);pwd=$($Credential.GetNetworkCredential().Password);database=$($Database);";
-            }
-        else
-        {
-            $ConnectionString = "server=$($ComputerName);port=$($Port);uid=$($Credential.UserName);pwd=$($Credential.GetNetworkCredential().Password);";
-            }
         }
-    Process
-    {
-        try
-        {
+        else {
+            $ConnectionString = "server=$($ComputerName);port=$($Port);uid=$($Credential.UserName);pwd=$($Credential.GetNetworkCredential().Password);";
+        }
+    }
+    Process {
+        try {
             $ErrorActionPreference = "Stop";
             Write-Verbose "Create connection object";
             [MySql.Data.MySqlClient.MySqlConnection]$Connection = New-Object MySql.Data.MySqlClient.MySqlConnection($ConnectionString);
             Write-Verbose "Open connection";
             $Connection.Open();
             $Global:MySQLConnection = $Connection
-            if ($Database)
-            {
+            if ($Database) {
                 Write-Verbose "Using $($Database)";
                 [MySql.Data.MySqlClient.MySqlCommand]$Command = New-Object MySql.Data.MySqlClient.MySqlCommand("USE $($Database)", $Connection);
-                }
             }
-        catch
-        {
+        }
+        catch {
             $Error[0];
             break
-            }
-        }
-    End
-    {
-        return $Connection;
         }
     }
-Function Disconnect-MySqlServer
-{
+    End {
+        return $Connection;
+    }
+}
+Function Disconnect-MySqlServer {
     <#
         .SYNOPSIS
             Disconnect a MySQL connection
@@ -158,7 +147,7 @@ Function Disconnect-MySqlServer
 
             Description
             -----------
-            This example shows connecting to the local instance of MySQL 
+            This example shows connecting to the local instance of MySQL
             Server and then disconnecting from it.
         .NOTES
             FunctionName : Disconnect-MySqlServer
@@ -169,29 +158,25 @@ Function Disconnect-MySqlServer
     #>
     [CmdletBinding()]
     Param
-        (
-        [MySql.Data.MySqlClient.MySqlConnection]$Connection=$Global:MySQLConnection
-        )
-    Begin
-    {
-        }
-    Process
-    {
+    (
+        [MySql.Data.MySqlClient.MySqlConnection]$Connection = $Global:MySQLConnection
+    )
+    Begin {
+    }
+    Process {
         $Connection.Close();
         $Connection
-        }
-    End
-    {
-        }
     }
-Function Select-MySqlDatabase
-{
+    End {
+    }
+}
+Function Select-MySqlDatabase {
     <#
         .SYNOPSIS
             Set the default database to work with
         .DESCRIPTION
-            This function sets the default database to use, this value is 
-            pulled from the connection object on functions that have database 
+            This function sets the default database to use, this value is
+            pulled from the connection object on functions that have database
             as a parameter.
         .PARAMETER Connection
         .PARAMETER Database
@@ -253,8 +238,8 @@ Function Select-MySqlDatabase
 
             Description
             -----------
-            This example shows connecting to MySQL Server, you can see there is no value for database. 
-            Then we list all the databases on the server, and finally we select the mytest database. 
+            This example shows connecting to MySQL Server, you can see there is no value for database.
+            Then we list all the databases on the server, and finally we select the mytest database.
             The output of the command shows that we are now using mytest.
         .NOTES
             FunctionName : Select-MySqlDatabase
@@ -265,46 +250,38 @@ Function Select-MySqlDatabase
     #>
     [CmdletBinding()]
     Param
-        (
-        [MySql.Data.MySqlClient.MySqlConnection]$Connection=$Global:MySQLConnection,
+    (
+        [MySql.Data.MySqlClient.MySqlConnection]$Connection = $Global:MySQLConnection,
         [parameter(Mandatory = $true)]
         [string]$Database
-        )
-    Begin
-    {
-        }
-    Process
-    {
-        try
-        {
-            if (Get-MySqlDatabase -Connection $Connection -Name $Database)
-            {
+    )
+    Begin {
+    }
+    Process {
+        try {
+            if (Get-MySqlDatabase -Connection $Connection -Name $Database) {
                 $Connection.ChangeDatabase($Database);
-                }
-            else
-            {
+            }
+            else {
                 throw "Unknown database $($Database)";
-                }
+            }
             $Global:MySQLConnection = $Connection;
             $Connection;
-            }
-        catch
-        {
+        }
+        catch {
             $Error[0];
             break
-            }
-        }
-    End
-    {
         }
     }
-Function New-MySqlDatabase
-{
+    End {
+    }
+}
+Function New-MySqlDatabase {
     <#
         .SYNOPSIS
             Create a new MySQL DB
         .DESCRIPTION
-            This function will create a new Database on the server that you are 
+            This function will create a new Database on the server that you are
             connected to.
         .PARAMETER Connection
             A connection object that represents an open connection to MySQL Server
@@ -329,36 +306,30 @@ Function New-MySqlDatabase
     #>
     [CmdletBinding()]
     Param
-        (
-        [MySql.Data.MySqlClient.MySqlConnection]$Connection=$Global:MySQLConnection,
+    (
+        [MySql.Data.MySqlClient.MySqlConnection]$Connection = $Global:MySQLConnection,
         [parameter(Mandatory = $true)]
         [string]$Name
-        )
-    Begin
-    {
+    )
+    Begin {
         $Query = "CREATE DATABASE $($Name);";
-        }
-    Process
-    {
-        try
-        {
+    }
+    Process {
+        try {
             Write-Verbose "Invoking SQL";
             Invoke-MySqlQuery -Connection $Connection -Query $Query -ErrorAction Stop;
             Write-Verbose "Getting newly created database";
             Get-MySqlDatabase -Connection $Connection -Name $Name;
-            }
-        catch
-        {
+        }
+        catch {
             $Error[0];
             break
-            }
-        }
-    End
-    {
         }
     }
-Function Get-MySqlDatabase
-{
+    End {
+    }
+}
+Function Get-MySqlDatabase {
     <#
         .SYNOPSIS
             Get one or more tables from a MySQL Server
@@ -367,8 +338,8 @@ Function Get-MySqlDatabase
         .PARAMETER Connection
             A connection object that represents an open connection to MySQL Server
         .PARAMETER Name
-            An optional parameter that if provided will scope the output to the requested 
-            DB. If blank this will return all the Datbases the user has the ability to 
+            An optional parameter that if provided will scope the output to the requested
+            DB. If blank this will return all the Datbases the user has the ability to
             see based on their credentials.
         .EXAMPLE
             Get-MySqlDatabase -Connection $Connection
@@ -407,40 +378,32 @@ Function Get-MySqlDatabase
     #>
     [CmdletBinding()]
     Param
-        (
-        [MySql.Data.MySqlClient.MySqlConnection]$Connection=$Global:MySQLConnection,
+    (
+        [MySql.Data.MySqlClient.MySqlConnection]$Connection = $Global:MySQLConnection,
         [string]$Name
-        )
-    Begin
-    {
-        if ($Name)
-        {
+    )
+    Begin {
+        if ($Name) {
             $Query = "SHOW DATABASES WHERE ``Database`` LIKE '$($Name)';";
-            }
-        else
-        {
+        }
+        else {
             $Query = "SHOW DATABASES;";
-            }
-        }
-    Process
-    {
-        try
-        {
-            Write-Verbose "Invoking SQL";
-            Invoke-MySqlQuery -Connection $Connection -Query $Query -ErrorAction Stop;
-            }
-        catch
-        {
-            $Error[0];
-            break
-            }
-        }
-    End
-    {
         }
     }
-Function New-MySqlUser
-{
+    Process {
+        try {
+            Write-Verbose "Invoking SQL";
+            Invoke-MySqlQuery -Connection $Connection -Query $Query -ErrorAction Stop;
+        }
+        catch {
+            $Error[0];
+            break
+        }
+    }
+    End {
+    }
+}
+Function New-MySqlUser {
     <#
         .SYNOPSIS
             Create a MySQL User
@@ -514,36 +477,30 @@ Function New-MySqlUser
     #>
     [CmdletBinding()]
     Param
-        (
-        [MySql.Data.MySqlClient.MySqlConnection]$Connection=$Global:MySQLConnection,
+    (
+        [MySql.Data.MySqlClient.MySqlConnection]$Connection = $Global:MySQLConnection,
         [parameter(Mandatory = $true)]
         [System.Management.Automation.PSCredential]$Credential
-        )
-    Begin
-    {
+    )
+    Begin {
         $Query = "CREATE USER '$($Credential.UserName)'@'$($Connection.DataSource)' IDENTIFIED BY '$($Credential.GetNetworkCredential().Password)';";
-        }
-    Process
-    {
-        try
-        {
+    }
+    Process {
+        try {
             Write-Verbose "Invoking SQL";
             Invoke-MySqlQuery -Connection $Connection -Query $Query -ErrorAction Stop;
             Write-Verbose "Getting newly created user";
             Get-MySqlUser -Connection $Connection -User $Credential.UserName;
-            }
-        catch
-        {
+        }
+        catch {
             $Error[0];
             break
-            }
-        }
-    End
-    {
         }
     }
-Function Get-MySqlUser
-{
+    End {
+    }
+}
+Function Get-MySqlUser {
     <#
         .SYNOPSIS
             Get one or more MySQL Server users
@@ -626,43 +583,35 @@ Function Get-MySqlUser
     #>
     [CmdletBinding()]
     Param
-        (
-        [MySql.Data.MySqlClient.MySqlConnection]$Connection=$Global:MySQLConnection,
+    (
+        [MySql.Data.MySqlClient.MySqlConnection]$Connection = $Global:MySQLConnection,
         [string]$User
-        )
-    Begin
-    {
-        if ($User)
-        {
+    )
+    Begin {
+        if ($User) {
             $Query = "SELECT * FROM mysql.user WHERE ``User`` LIKE '$($User)';";
-            }
-        else
-        {
+        }
+        else {
             $Query = "SELECT * FROM mysql.user;"
-            }
-        }
-    Process
-    {
-        try
-        {
-            Write-Verbose "Invoking SQL";
-            Invoke-MySqlQuery -Connection $Connection -Query $Query -ErrorAction Stop;
-            }
-        catch
-        {
-            $Error[0];
-            break
-            }
-        }
-    End
-    {
         }
     }
-Function New-MySqlTable
-{
+    Process {
+        try {
+            Write-Verbose "Invoking SQL";
+            Invoke-MySqlQuery -Connection $Connection -Query $Query -ErrorAction Stop;
+        }
+        catch {
+            $Error[0];
+            break
+        }
+    }
+    End {
+    }
+}
+Function New-MySqlTable {
     <#
         .SYNOPSIS
-            Create a table 
+            Create a table
         .DESCRIPTION
             This function creates a table
         .PARAMETER Connection
@@ -672,11 +621,11 @@ Function New-MySqlTable
         .PARAMETER Database
             The name of the database to create the table in, if blank the current database
         .PARAMETER Column
-            A hashtable containing at least a name and datatype for a row to be 
-            created in the table. For example it could be something as simple or 
+            A hashtable containing at least a name and datatype for a row to be
+            created in the table. For example it could be something as simple or
             complex as the following
                 @{"id"="INT"}
-                @{"id"="INT(11) NOT NULL AUTO_INCREMENT","PRIMARY KEY"="(id)"} 
+                @{"id"="INT(11) NOT NULL AUTO_INCREMENT","PRIMARY KEY"="(id)"}
         .EXAMPLE
             $Fields.GetEnumerator()
 
@@ -697,8 +646,8 @@ Function New-MySqlTable
 
             Description
             -----------
-            This example shows using a hashtable object to set the field names 
-            and values of the various fields to be created in the new table. It 
+            This example shows using a hashtable object to set the field names
+            and values of the various fields to be created in the new table. It
             then shows how to create a table with that object.
         .EXAMPLE
             New-MySqlTable -Connection $Connection -Table sample_tbl -Column @{"id"="INT(11) NOT NULL AUTO_INCREMENT";"PRIMARY KEY"="(id)"}
@@ -720,70 +669,57 @@ Function New-MySqlTable
     #>
     [CmdletBinding()]
     Param
-        (
-        [MySql.Data.MySqlClient.MySqlConnection]$Connection=$Global:MySQLConnection,
+    (
+        [MySql.Data.MySqlClient.MySqlConnection]$Connection = $Global:MySQLConnection,
         [parameter(Mandatory = $true)]
         [string]$Table,
         [string]$Database,
         [parameter(Mandatory = $true)]
         [hashtable]$Column
-        )
-    Begin
-    {
-        try
-        {
+    )
+    Begin {
+        try {
             $ErrorActionPreference = "Stop";
-            if ($Database)
-            {
-                if (Get-MySqlDatabase -Connection $Connection -Name $Database)
-                {
+            if ($Database) {
+                if (Get-MySqlDatabase -Connection $Connection -Name $Database) {
                     $Connection.ChangeDatabase($Database);
-                    }
-                else
-                {
-                    throw "Unknown database $($Database)";
-                    }
                 }
-            else
-            {
-                if (!($Connection.Database))
-                {
-                    throw "Please connect to a specific database";
-                    }
+                else {
+                    throw "Unknown database $($Database)";
                 }
             }
-        catch
-        {
+            else {
+                if (!($Connection.Database)) {
+                    throw "Please connect to a specific database";
+                }
+            }
+        }
+        catch {
             $Error[0];
             break
-            }
+        }
         $Fields = "";
-        foreach ($C in $Column.GetEnumerator()){$Fields += "$($C.Name) $($C.Value),"};
-        $Fields = $Fields.Substring(0,$Fields.Length-1);
+        foreach ($C in $Column.GetEnumerator()) { $Fields += "$($C.Name) $($C.Value)," };
+        $Fields = $Fields.Substring(0, $Fields.Length - 1);
         Write-Verbose $Fields;
         $Query = "CREATE TABLE $($Table) ($($Fields));"
-        }
-    Process
-    {
-        try
-        {
+    }
+    Process {
+        try {
             Write-Verbose "Invoking SQL";
             Invoke-MySqlQuery -Connection $Connection -Query $Query -ErrorAction Stop;
             Write-Verbose "Getting newly created table";
             Get-MySqlTable -Connection $Connection -Table $Table;
-            }
-        catch
-        {
+        }
+        catch {
             $Error[0];
             break
-            }
-        }
-    End
-    {
         }
     }
-Function Get-MySqlTable
-{
+    End {
+    }
+}
+Function Get-MySqlTable {
     <#
         .SYNOPSIS
             Get a list of one or more tables on a database
@@ -836,74 +772,59 @@ Function Get-MySqlTable
     #>
     [CmdletBinding()]
     Param
-        (
-        [MySql.Data.MySqlClient.MySqlConnection]$Connection=$Global:MySQLConnection,
+    (
+        [MySql.Data.MySqlClient.MySqlConnection]$Connection = $Global:MySQLConnection,
         [string]$Database,
         [string]$Table
-        )
-    Begin
-    {
-        try
-        {
+    )
+    Begin {
+        try {
             $ErrorActionPreference = "Stop";
-            if ($Database)
-            {
-                if (Get-MySqlDatabase -Connection $Connection -Name $Database)
-                {
+            if ($Database) {
+                if (Get-MySqlDatabase -Connection $Connection -Name $Database) {
                     $Connection.ChangeDatabase($Database);
-                    }
-                else
-                {
+                }
+                else {
                     throw "Unknown database $($Database)";
-                    }
                 }
-            else
-            {
-                if (!($Connection.Database))
-                {
+            }
+            else {
+                if (!($Connection.Database)) {
                     throw "Please connect to a specific database";
-                    }
                 }
             }
-        catch
-        {
+        }
+        catch {
             $Error[0];
             break
-            }
+        }
         $db = $Connection.Database;
-        if ($Table)
-        {
+        if ($Table) {
             $Query = "SHOW TABLES FROM $($db) WHERE ``Tables_in_$($db)`` LIKE '$($Table)';"
-            }
-        else
-        {
+        }
+        else {
             $Query = "SHOW TABLES FROM $($db);"
-            }
-        }
-    Process
-    {
-        try
-        {
-            Write-Verbose "Invoking SQL";
-            Invoke-MySqlQuery -Connection $Connection -Query $Query -ErrorAction Stop;
-            }
-        catch
-        {
-            $Error[0];
-            break
-            }
-        }
-    End
-    {
         }
     }
-Function Get-MySqlColumn
-{
+    Process {
+        try {
+            Write-Verbose "Invoking SQL";
+            Invoke-MySqlQuery -Connection $Connection -Query $Query -ErrorAction Stop;
+        }
+        catch {
+            $Error[0];
+            break
+        }
+    }
+    End {
+    }
+}
+Function Get-MySqlColumn {
     <#
         .SYNOPSIS
             Get a list of columns in a table
         .DESCRIPTION
-            This function will return a list of columns from a table. 
+            This function will return a list of columns from a table.
         .PARAMETER Connection
             A connection object that represents an open connection to MySQL Server
         .PARAMETER Database
@@ -982,62 +903,49 @@ Function Get-MySqlColumn
     #>
     [CmdletBinding()]
     Param
-        (
-        [MySql.Data.MySqlClient.MySqlConnection]$Connection=$Global:MySQLConnection,
+    (
+        [MySql.Data.MySqlClient.MySqlConnection]$Connection = $Global:MySQLConnection,
         [string]$Database,
         [parameter(Mandatory = $true)]
         [string]$Table
-        )
-    Begin
-    {
-        try
-        {
+    )
+    Begin {
+        try {
             $ErrorActionPreference = "Stop";
-            if ($Database)
-            {
-                if (Get-MySqlDatabase -Connection $Connection -Name $Database)
-                {
+            if ($Database) {
+                if (Get-MySqlDatabase -Connection $Connection -Name $Database) {
                     $Connection.ChangeDatabase($Database);
-                    }
-                else
-                {
-                    throw "Unknown database $($Database)";
-                    }
                 }
-            else
-            {
-                if (!($Connection.Database))
-                {
-                    throw "Please connect to a specific database";
-                    }
+                else {
+                    throw "Unknown database $($Database)";
                 }
             }
-        catch
-        {
+            else {
+                if (!($Connection.Database)) {
+                    throw "Please connect to a specific database";
+                }
+            }
+        }
+        catch {
             $Error[0];
             break
-            }
-        $Query = "DESC $($Table);";
         }
-    Process
-    {
-        try
-        {
+        $Query = "DESC $($Table);";
+    }
+    Process {
+        try {
             Write-Verbose "Invoking SQL";
             Invoke-MySqlQuery -Connection $Connection -Query $Query -ErrorAction Stop;
-            }
-        catch
-        {
+        }
+        catch {
             $Error[0];
             break
-            }
-        }
-    End
-    {
         }
     }
-Function Add-MySqlColumn
-{
+    End {
+    }
+}
+Function Add-MySqlColumn {
     <#
         .SYNOPSIS
             Add a column to a MySQL table
@@ -1050,11 +958,11 @@ Function Add-MySqlColumn
         .PARAMETER Table
             The name of the table to add a column to
         .PARAMETER Column
-            A hashtable containing at least a name and datatype for a row to be 
-            created in the table. For example it could be something as simple or 
+            A hashtable containing at least a name and datatype for a row to be
+            created in the table. For example it could be something as simple or
             complex as the following
                 @{"id"="INT"}
-                @{"id"="INT(11) NOT NULL AUTO_INCREMENT";"PRIMARY KEY"="(id)";"Species"="VARCHAR(20)"} 
+                @{"id"="INT(11) NOT NULL AUTO_INCREMENT";"PRIMARY KEY"="(id)";"Species"="VARCHAR(20)"}
         .EXAMPLE
             Add-MySqlColumn -Connection $Connection -Database test -Table bar -Column @{"id"="INT(11) NOT NULL AUTO_INCREMENT";"PRIMARY KEY"="(id)";"Species"="VARCHAR(20)"}
 
@@ -1112,75 +1020,62 @@ Function Add-MySqlColumn
     #>
     [CmdletBinding()]
     Param
-        (
-        [MySql.Data.MySqlClient.MySqlConnection]$Connection=$Global:MySQLConnection,
+    (
+        [MySql.Data.MySqlClient.MySqlConnection]$Connection = $Global:MySQLConnection,
         [string]$Database,
         [parameter(Mandatory = $true)]
         [string]$Table,
         [parameter(Mandatory = $true)]
         [hashtable]$Column
-        )
-    Begin
-    {
-        try
-        {
+    )
+    Begin {
+        try {
             $ErrorActionPreference = "Stop";
-            if ($Database)
-            {
-                if (Get-MySqlDatabase -Connection $Connection -Name $Database)
-                {
+            if ($Database) {
+                if (Get-MySqlDatabase -Connection $Connection -Name $Database) {
                     $Connection.ChangeDatabase($Database);
-                    }
-                else
-                {
+                }
+                else {
                     throw "Unknown database $($Database)";
-                    }
                 }
-            else
-            {
-                if (!($Connection.Database))
-                {
+            }
+            else {
+                if (!($Connection.Database)) {
                     throw "Please connect to a specific database";
-                    }
                 }
+            }
             $Fields = "";
-            foreach ($C in $Column.GetEnumerator()){$Fields += "$($C.Name) $($C.Value),"};
-            $Fields = $Fields.Substring(0,$Fields.Length-1);
+            foreach ($C in $Column.GetEnumerator()) { $Fields += "$($C.Name) $($C.Value)," };
+            $Fields = $Fields.Substring(0, $Fields.Length - 1);
             Write-Verbose $Fields;
             $Query = "ALTER TABLE $($Table) ADD ($($Fields));";
-            }
-        catch
-        {
+        }
+        catch {
             $Error[0];
             break
-            }
         }
-    Process
-    {
-        try
-        {
+    }
+    Process {
+        try {
             Write-Verbose "Invoking SQL";
             Invoke-MySqlQuery -Connection $Connection -Query $Query -ErrorAction Stop;
             Get-MySqlColumn -Connection $Connection -Database $Database -Table $Table;
-            }
-        catch
-        {
+        }
+        catch {
             $Error[0];
             break
-            }
-        }
-    End
-    {
         }
     }
-Function Invoke-MySqlQuery
-{
+    End {
+    }
+}
+Function Invoke-MySqlQuery {
     <#
         .SYNOPSIS
             Run an ad-hoc query against a MySQL Server
         .DESCRIPTION
-            This function can be used to run ad-hoc queries against a MySQL Server. 
-            It is also used by nearly every function in this library to perform the 
+            This function can be used to run ad-hoc queries against a MySQL Server.
+            It is also used by nearly every function in this library to perform the
             various tasks that are needed.
         .PARAMETER Connection
             A connection object that represents an open connection to MySQL Server
@@ -1225,18 +1120,15 @@ Function Invoke-MySqlQuery
     #>
     [CmdletBinding()]
     Param
-        (
-        [MySql.Data.MySqlClient.MySqlConnection]$Connection=$Global:MySQLConnection,
+    (
+        [MySql.Data.MySqlClient.MySqlConnection]$Connection = $Global:MySQLConnection,
         [parameter(Mandatory = $true)]
         [string]$Query
-        )
-    Begin
-    {
-        }
-    Process
-    {
-        try
-        {
+    )
+    Begin {
+    }
+    Process {
+        try {
             $ErrorActionPreference = "Stop";
             Write-Verbose "Creating the Command object";
             [MySql.Data.MySqlClient.MySqlCommand]$Command = New-Object MySql.Data.MySqlClient.MySqlCommand;
@@ -1252,19 +1144,17 @@ Function Invoke-MySqlQuery
             Write-Verbose "Filling Dataset";
             $RecordCount = $DataAdapter.Fill($DataSet);
             Write-Verbose "$($RecordCount) records found";
-            }
-        catch
-        {
+        }
+        catch {
             $Error[0];
             break
-            }
-        }
-    End
-    {
-        Write-Verbose "Returning Tables object of Dataset";
-        return $DataSet.Tables;
         }
     }
+    End {
+        Write-Verbose "Returning Tables object of Dataset";
+        return $DataSet.Tables;
+    }
+}
 
 
 Export-ModuleMember *

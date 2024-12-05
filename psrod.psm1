@@ -2,6 +2,7 @@
 
 $AuthoralFunctions = Get-ChildItem -Path "$PSScriptRoot\Public\Authoral" -Filter *.ps1
 $ImportedFunctions = Get-ChildItem -Path "$PSScriptRoot\Public\Imported" -Filter *.ps1
+$Private = Get-ChildItem -Path "$PSScriptRoot\Private" -Filter *.ps1
 $AssemblyFolders = Get-ChildItem -Path $PSScriptRoot\Lib -Directory -ErrorAction SilentlyContinue
 
 Add-Type -AssemblyName PresentationCore, PresentationFramework
@@ -43,7 +44,7 @@ $FoundErrors = @(
         }
     }
     #Dot source the files
-    Foreach ($Import in @($Classes + $AuthoralFunctions + $ImportedFunctions)) {
+    Foreach ($Import in @($AuthoralFunctions + $ImportedFunctions + $Private)) {
         Try {
             . $Import.Fullname
         }
@@ -60,4 +61,4 @@ if ($FoundErrors.Count -gt 0) {
     break
 }
 
-Export-ModuleMember -Function '*' -Alias '*'
+Export-ModuleMember -Function '*' -Alias '*' -Cmdlet '*'

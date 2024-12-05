@@ -1,4 +1,4 @@
-function ConvertTo-MorseCode {
+﻿function ConvertTo-MorseCode {
     <#
 .SYNOPSIS
 	Writes text in Morse code
@@ -84,7 +84,7 @@ function ConvertTo-MorseCode {
 
         [char[]]$ArrayOfChars = $text.ToUpper()
         foreach ($Char in $ArrayOfChars) {
-            Char2MorseCode $Char 
+            Char2MorseCode $Char
         }
         # exit 0 # success
     }

@@ -1,5 +1,5 @@
-# Update one project packages
-function Update-DotnetPackages {
+﻿# Update one project packages
+function Update-DotnetPackage {
     param (
         [string]
         [parameter(ValueFromPipelineByPropertyName, Mandatory = $true)]
@@ -34,11 +34,11 @@ function Update-DotnetPackages {
     return $return
 }
 
-function Update-DotnetProjects {
+function Update-DotnetProject {
 
     begin {
         # Restore dependencies
-        dotnet restore --interactive  
+        dotnet restore --interactive
         $updated = $false
     }
 

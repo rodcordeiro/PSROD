@@ -1,4 +1,4 @@
-# https://devtipscurator.wordpress.com/2017/02/01/quick-tip-how-to-wait-for-user-keypress-in-powershell/
+﻿# https://devtipscurator.wordpress.com/2017/02/01/quick-tip-how-to-wait-for-user-keypress-in-powershell/
 Function Pause ($Message = "Press any key to continue...") {
     # Check if running in PowerShell ISE
     If ($psISE) {
@@ -8,7 +8,7 @@ Function Pause ($Message = "Press any key to continue...") {
         $Button = $Shell.Popup("Click OK to continue.", 0, "Hello", 0)
         Return
     }
-  
+
     $Ignore =
     16, # Shift (left or right)
     17, # Ctrl (left or right)
@@ -37,9 +37,9 @@ Function Pause ($Message = "Press any key to continue...") {
     181, # Select Media
     182, # Application 1
     183  # Application 2
-  
+
     Write-Host -NoNewline $Message
-    While ($KeyInfo.VirtualKeyCode -Eq $Null -Or $Ignore -Contains $KeyInfo.VirtualKeyCode) {
+    While ($Null -Eq $KeyInfo.VirtualKeyCode -Or $Ignore -Contains $KeyInfo.VirtualKeyCode) {
         $KeyInfo = $Host.UI.RawUI.ReadKey("NoEcho, IncludeKeyDown")
     }
 }

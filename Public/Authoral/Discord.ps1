@@ -1,4 +1,4 @@
-Function Discord {
+﻿Function Discord {
     <#
     .SYNOPSIS
         Sends a discord message through webhook
@@ -37,14 +37,14 @@ Function Discord {
         # if (!$Silent) {
         #     $Silent = $false
         # }
-        
+
     }
     Process {
         $headers = @{}
         $headers.Add("Content-Type", "application/json")
-        
+
         $session = New-Object Microsoft.PowerShell.Commands.WebRequestSession
-        
+
         if (!$Content) {
             $Content = "Some hello"
         }
@@ -58,16 +58,16 @@ Function Discord {
             "content"    = $Content;
             "username"   = $Username;
             "avatar_url" = $Avatar
-        }    
+        }
         if (!$Webhook) {
             $Webhook = $env:DISCORD_WEBHOOK
         }
-    
+
         $request = $(Invoke-WebRequest -Uri $Webhook -Method POST -Headers $headers -WebSession $session -Body "$($body | ConvertTo-Json)" -UseBasicParsing -ErrorAction SilentlyContinue)
-        
+
         if (!$Silent) {
             $request
         }
-        
+
     }
 }

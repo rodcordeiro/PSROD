@@ -1,7 +1,7 @@
-
+﻿
 function Notify {
-    <# 
-    .SYNOPSIS 
+    <#
+    .SYNOPSIS
         Shows a notification
     .DESCRIPTION
         Shows a notification modal on terminal, allowing to use as alert.
@@ -18,7 +18,7 @@ function Notify {
     .EXAMPLE
         notify Title "Some usefull message"
     #>
-    
+
     param(
         [parameter(ValueFromPipelineByPropertyName, HelpMessage = "Please, enter the message title")][string]$Title,
         [parameter(ValueFromPipelineByPropertyName, HelpMessage = "Please, inform the message")][string]$Message,
@@ -30,15 +30,15 @@ function Notify {
         [void][Reflection.Assembly]::LoadWithPartialName('Microsoft.VisualBasic')
     }
     Process {
-        
+
         if (!$Title) {
             $Title = "Alerta !!"
         }
         if (!$Message) {
             $Message = "Terminei algo!"
         }
-    
-    
+
+
         #$msgBody = "Reboot the computer now?"
         # $msgTitle = "Confirm Reboot"
         # $msgButton = 'YesNoCancel'
@@ -49,7 +49,7 @@ function Notify {
             # [console]::beep(440, 1000)
             (New-Object System.Media.SoundPlayer "C:\Windows\Media\chimes.wav").Play()
         }
-        
+
         [System.Windows.MessageBox]::Show($Message, $Title, 0, 0)
 
     }

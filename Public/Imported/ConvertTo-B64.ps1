@@ -1,4 +1,4 @@
-#https://stackoverflow.com/questions/73000957/powershell-form-to-convert-string-to-base64-and-back-and-write-to-file
+﻿#https://stackoverflow.com/questions/73000957/powershell-form-to-convert-string-to-base64-and-back-and-write-to-file
 
 Function ConvertTo-B64 {
     param(
@@ -9,7 +9,7 @@ Function ConvertTo-B64 {
     # write-param
     $encoded = [Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes($Content))
     return  $encoded
-    
+
 }
 Function ConvertFrom-B64 {
     param(
@@ -19,5 +19,5 @@ Function ConvertFrom-B64 {
     )
     $encoded = [System.Text.Encoding]::ASCII.GetString([System.Convert]::FromBase64String($Content))
     return  $encoded
-    
+
 }

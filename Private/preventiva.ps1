@@ -1,17 +1,17 @@
-[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+﻿[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
 # Verificar se a pasta de preventiva existe
 # Verificar se os arquivos estão na pasta
 # Executar
 class Manutencao {
- 
+
     hidden [void]clear_folder([string]$folder) {
         Get-ChildItem  $folder | ForEach-Object { Remove-Item "$($folder)\$($_)" -Force -Recurse | Out-Null }
         Remove-Item $folder -Force -Recurse | Out-Null
         New-Item -ItemType Directory $folder | Out-Null
     }
     hidden [void]delete_folder([string]$folder) {
-        Get-ChildItem  $folder | ForEach-Object { 
+        Get-ChildItem  $folder | ForEach-Object {
             Remove-Item "$($folder)\$($_)" -Force -Recurse | Out-Null
         }
         Remove-Item $folder -Force -Recurse | Out-Null
@@ -19,14 +19,14 @@ class Manutencao {
 
     [void]ClearDisk() {
         Write-Log -Message 'Clearing CleanMgr.exe automation settings.'
-    
+
         $getItemParams = @{
             Path        = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\*'
             Name        = 'StateFlags0001'
             ErrorAction = 'SilentlyContinue'
         }
         Get-ItemProperty @getItemParams | Remove-ItemProperty -Name StateFlags0001 -ErrorAction SilentlyContinue
-    
+
         $enabledSections = @(
             'Active Setup Temp Folders'
             'BranchCache'
@@ -61,7 +61,7 @@ class Manutencao {
             'Windows ESD installation files'
             'Windows Upgrade Log Files'
         )
-    
+
         Write-Verbose -Message 'Adding enabled disk cleanup sections...'
         foreach ($keyName in $enabledSections) {
             $newItemParams = @{
@@ -73,18 +73,18 @@ class Manutencao {
             }
             $null = New-ItemProperty @newItemParams
         }
-    
+
         Write-Verbose -Message 'Starting CleanMgr.exe...'
-        Start-Process -FilePath CleanMgr.exe -ArgumentList '/sagerun:1 /d C' -NoNewWindow -Wait 
-    
+        Start-Process -FilePath CleanMgr.exe -ArgumentList '/sagerun:1 /d C' -NoNewWindow -Wait
+
         Write-Verbose -Message 'Waiting for CleanMgr and DismHost processes...'
-        Get-Process -Name cleanmgr, dismhost -ErrorAction SilentlyContinue | Wait-Process    
+        Get-Process -Name cleanmgr, dismhost -ErrorAction SilentlyContinue | Wait-Process
         Optimize-Volume -ReTrim -Defrag -SlabConsolidate -TierOptimize -DriveLetter C
 
     }
-    
 
-    [void]cleaner() {        
+
+    [void]cleaner() {
         $this.delete_folder("$($Env:SystemRoot)\temp")
         $this.delete_folder("$($Env:SystemRoot)\Prefetch")
         $this.delete_folder($Env:TEMP)
@@ -164,18 +164,18 @@ class Manutencao {
         if (Test-Path -Path "$($Env:SystemRoot)\ShellIconCache") {
             $this.delete_folder("$($Env:SystemRoot)\ShellIconCache")
         }
-        
+
         # Limpar a lixeira
-        Clear-RecycleBin -Force 
+        Clear-RecycleBin -Force
         $this.ClearDisk()
     }
-    
+
     [void]Repair() {
         Write-Output 'Starting DISM command with arguments: /Online /Cleanup-image /Restorehealth'
         DISM.exe /Online /Cleanup-image /Restorehealth
         Write-Output 'Starting SFC command with arguments: /scannow'
         sfc /scannow
-        Write-Output 'Finished repair.'    
+        Write-Output 'Finished repair.'
     }
 
     [void]DiskEvents() {
@@ -192,15 +192,15 @@ class Manutencao {
         #search and list all missing Drivers
         $Session = New-Object -ComObject Microsoft.Update.Session
         $Searcher = $Session.CreateUpdateSearcher()
-        
+
         Write-Host -Object 'Searching Driver-Updates...' -ForegroundColor Green
         $Criteria = "IsInstalled=0 and ISHidden=0"
         $SearchResult = $Searcher.Search($Criteria)
         $Updates = $SearchResult.Updates
-        
+
         # Show available Drivers
         $Updates | Select-Object -Property Title, DriverModel, DriverVerDate, Driverclass, DriverManufacturer
-        
+
         # Download the Drivers from Microsoft
         $UpdatesToDownload = New-Object -Com Microsoft.Update.UpdateColl
         $Updates | Foreach-Object -Process {
@@ -225,11 +225,11 @@ class Manutencao {
         if ($InstallationResult.RebootRequired) {
             if ($Reboot) { shutdown -r -f -t 0; return }
             Write-Host -Object 'Reboot required! please reboot now..' -ForegroundColor Red
-            
+
         }
         else {
             Write-Host -Object 'Done..' -ForegroundColor Green
         }
     }
-    
+
 }

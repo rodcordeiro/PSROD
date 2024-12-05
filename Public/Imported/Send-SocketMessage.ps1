@@ -1,14 +1,14 @@
-function Send-SocketMessage {
+﻿function Send-SocketMessage {
     <#
     .Notes
         https://www.jesusninoc.com/01/02/server-and-client-sockets-tcp/
     #>
     param(
-        [parameter(ValueFromPipelineByPropertyName, Mandatory = $true)][String]$Content,    
+        [parameter(ValueFromPipelineByPropertyName, Mandatory = $true)][String]$Content,
         [parameter(ValueFromPipelineByPropertyName)][int]$Port = 2050,
         [parameter(ValueFromPipelineByPropertyName)][IPAddress]$IPAddress = [IPAddress]::Loopback
 
-    )   
+    )
     Begin {
         $TcpClient = New-Object System.Net.Sockets.TcpClient($IPAddress, $port)
 
@@ -17,12 +17,12 @@ function Send-SocketMessage {
     Process {
         $GetStream = $TcpClient.GetStream()
         $StreamWriter = New-Object System.IO.StreamWriter $GetStream
-        
+
         $StreamWriter.Write($Content)
     }
     End {
         $StreamWriter.Dispose()
         $GetStream.Dispose()
         $TcpClient.Dispose()
-    }    
+    }
 }
