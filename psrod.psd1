@@ -8,7 +8,7 @@
 
 @{
     RootModule        = '.\psrod.psm1'
-    ModuleVersion     = '1.0.0'
+    ModuleVersion     = '1.1.0'
     # PSEditions com suporte
     # CompatiblePSEditions = @()
     GUID              = '75c2e6dc-8300-44d2-9b28-f48d5d35cf64'
@@ -22,7 +22,7 @@
     # DotNetFrameworkVersion = ''
     # CLRVersion = ''
     # ProcessorArchitecture = ''
-    # RequiredModules = @()
+    RequiredModules   = @('NameIT')
     # RequiredAssemblies = @()
     # ScriptsToProcess  = @('private/classes.ps1', 'private/preventiva.ps1')
     # TypesToProcess = @()
