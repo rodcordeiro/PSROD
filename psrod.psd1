@@ -8,7 +8,7 @@
 
 @{
     RootModule        = '.\psrod.psm1'
-    ModuleVersion     = '1.1.0'
+    ModuleVersion     = '1.2.0'
     # PSEditions com suporte
     # CompatiblePSEditions = @()
     GUID              = '75c2e6dc-8300-44d2-9b28-f48d5d35cf64'
