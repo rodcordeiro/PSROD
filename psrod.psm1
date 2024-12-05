@@ -61,4 +61,7 @@ if ($FoundErrors.Count -gt 0) {
     break
 }
 
-Export-ModuleMember -Function '*' -Alias '*' -Cmdlet '*'
+# Export-ModuleMember -Function (($AuthoralFunctions + $ImportedFunctions) | ForEach-Object { $_.BaseName }) -Alias '*'
+Export-ModuleMember -Function (Get-ChildItem -Path "$PSScriptRoot\Public\Authoral" -Filter *.ps1 | ForEach-Object { $_.BaseName }) -Alias '*'
+Export-ModuleMember -Function (Get-ChildItem -Path "$PSScriptRoot\Public\Imported" -Filter *.ps1 | ForEach-Object { $_.BaseName }) -Alias '*'
+
