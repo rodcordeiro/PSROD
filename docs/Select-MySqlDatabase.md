@@ -5,16 +5,12 @@ online version: https://github.com/rodcordeiro/PSROD/blob/main/Public/Authoral/P
 schema: 2.0.0
 ---
 
-# Read-NetworkSpeed
+# Select-MySqlDatabase
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
 
 ## SYNTAX
-
-```
-Read-NetworkSpeed [<CommonParameters>]
-```
 
 ## DESCRIPTION
 {{ Fill in the Description }}
@@ -22,7 +18,7 @@ Read-NetworkSpeed [<CommonParameters>]
 ## EXAMPLES
 
 ### Example 1
-```powershell
+```
 PS C:\> {{ Add example code here }}
 ```
 
@@ -36,7 +32,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### Nenhum
-
 ## OUTPUTS
 
 ### System.Object
