@@ -2,7 +2,10 @@
     param(
         [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName)]
         [string]
-        $text
+        $text,
+        # Enables beeping
+        [Parameter(Mandatory = $false)]
+        [switch]$Beep
     )
     begin {
         [int]$speed = 1;
@@ -17,13 +20,13 @@
         }
 
         function dot {
-            [console]::beep(440, 150)
+            if ($Beep) { [console]::beep(440, 150) }
             Write-Output "." # -nonewline
             start-sleep -milliseconds $speed # signal
         }
 
         function dash {
-            [console]::beep(440, 300)
+            if ($Beep) { [console]::beep(440, 300) }
             Write-Output "_" # -nonewline
             start-sleep -milliseconds (3 * $speed) # signal
         }
