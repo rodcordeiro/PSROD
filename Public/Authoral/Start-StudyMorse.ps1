@@ -12,7 +12,7 @@
     process {
         # Generate a random word of length 7
         $possibilities = @('verb', 'noun', 'person', 'job', 'synonym', 'adjective', 'color')
-        $randomWord = (Invoke-Generate ($possibilities[(get-random -Minimum 0 -Maximum $possibilities.Count)]))
+        $randomWord = (Invoke-Generate (Get-Random -InputObject $possibilities))
         
         
         if ($beeping) {
