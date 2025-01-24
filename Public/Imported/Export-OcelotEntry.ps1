@@ -43,7 +43,7 @@ $_"
             }
         }
 
-        $dictionary.Routes = Flatten-Array $dictionary.Routes
+        $dictionary.Routes = ConvertTo-FlattenArray $dictionary.Routes
         $jsonOutput = $dictionary | ConvertTo-Json -Depth 10 -Compress
 
         # Write the JSON output to a file
