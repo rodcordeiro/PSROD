@@ -108,7 +108,7 @@
                 return $holidays
             }
         }
-        
+
         function Print-Month ($month, $year) {
             $firstDayOfMonth = Get-Date -month $month -day 1 -year $year
             $lastDayOfMonth = (Get-Date -month $firstDayOfMonth.AddMonths(1).Month -day 1 -year $firstDayOfMonth.AddMonths(1).Year).AddDays(-1)
@@ -224,7 +224,7 @@
             }
         }
 
-       
+
 
         function Find-WeekDayMultiple ($year, $month, $dayOfWeek, $multiple) {
             $result = Get-Date -Year $year -Month $month -Day 1
