@@ -21,14 +21,14 @@
 
 
     $LocalImagePath = $PSScriptRoot.ToString().Replace("\Public\Imported", "\assets\psyduck.webp")
- 
+
     $image = ($RawXml.toast.visual.binding.image | Where-Object { $_.id -eq "1" })
     $image.setAttribute("id", "1");
     $image.setAttribute("src", $LocalImagePath);
     $image.setAttribute("alt", "Psyduck Icon");
     $image.setAttribute("placement", "hero");
     $RawXml.toast.visual.binding.AppendChild($image) > $null
- 
+
     $SerializedXml = New-Object Windows.Data.Xml.Dom.XmlDocument
     $SerializedXml.LoadXml($RawXml.OuterXml)
 
