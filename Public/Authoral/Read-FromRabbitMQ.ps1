@@ -11,35 +11,7 @@ class RabbitMessage {
     [RabbitMessageAction[]]$actions;
 }
 
-class NotificationHandler {
-    [void] Handler($listener, $params) {
-        [RabbitMessage]$message = $params;
-        # Write-Host "Running $($listener.Running)"
-        if ($message.type -eq 'notification') {
-            $message_params = @{
-                ToastTitle = $message.title;
-                ToastText  = $message.description;
-            }
-            if ($message.schedule.Year -ne '0001') {
-                $message_params.Add("Schedule", $message.schedule);
-            }
-            Show-Notification @message_params
-        }
-    }
-}
 
-class ActionsHandler {
-    [void] Handler($listener, $params) {
-        [RabbitMessage]$message = $params;
-        if ($message.type -eq 'action') {
-            $message.actions | ForEach-Object {
-                $action = $_.action
-                $scriptBlock = [Scriptblock]::Create($action)
-                $scriptBlock.Invoke()
-            }
-        }
-    }
-}
 
 function Read-FromRabbitMQ {
     param(
@@ -60,6 +32,37 @@ function Read-FromRabbitMQ {
         $RoutingKey = "notification"
     )
     begin {
+        class NotificationHandler {
+            [void] Handler($listener, $params) {
+
+                [RabbitMessage]$message = $params;
+                # Write-Host "Running $($listener.Running)"
+                if ($message.type -eq 'notification') {
+                    $message_params = @{
+                        ToastTitle = $message.title;
+                        ToastText  = $message.description;
+                    }
+                    if ($message.schedule.Year -ne '0001') {
+                        $message_params.Add("Schedule", $message.schedule);
+                    }
+                    Show-Notification @message_params
+                }
+            }
+        }
+
+        class ActionsHandler {
+            [void] Handler($listener, $params) {
+                [RabbitMessage]$message = $params;
+                if ($message.type -eq 'action') {
+                    $message.actions | ForEach-Object {
+                        $action = $_.action
+                        $scriptBlock = [Scriptblock]::Create($action)
+                        $scriptBlock.Invoke()
+                    }
+                }
+            }
+        }
+
         $receiver = New-Object MessagesReceiver
         $notificationHandler = New-Object NotificationHandler
         $actionsHandler = New-Object ActionsHandler
@@ -90,3 +93,5 @@ function Read-FromRabbitMQ {
         )
     }
 }
+
+Set-Alias rabbit Read-FromChat

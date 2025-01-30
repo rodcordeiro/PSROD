@@ -20,7 +20,6 @@
             $strPass = ConvertTo-SecureString -String $env:RabbitMQ_Password -AsPlainText -Force
             $Cred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList ($env:RabbitMQ_User, $strPass)
 
-
             $Conn = New-RabbitMqConnectionFactory -ComputerName 82.180.136.148 -Credential $Cred -Port 3340
 
             $Params = @{

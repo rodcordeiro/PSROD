@@ -8,7 +8,16 @@
         $ToastText,
         [datetime]
         [parameter(ValueFromPipeline, Mandatory = $false)]
-        $Schedule
+        $Schedule,
+        [string]
+        [parameter(ValueFromPipeline, Mandatory = $false)]
+        $IconUri,
+        [string]
+        [parameter(ValueFromPipeline, Mandatory = $false)]
+        $Group = "Powershell",
+        [string]
+        [parameter(ValueFromPipeline, Mandatory = $false)]
+        $Tag = "Powershell"
     )
 
     # https://den.dev/blog/powershell-windows-notification/
@@ -20,11 +29,16 @@
     ($RawXml.toast.visual.binding.text | Where-Object { $_.id -eq "2" }).AppendChild($RawXml.CreateTextNode($ToastText)) > $null
 
 
-    $LocalImagePath = $PSScriptRoot.ToString().Replace("\Public\Imported", "\assets\psyduck.webp")
 
     $image = ($RawXml.toast.visual.binding.image | Where-Object { $_.id -eq "1" })
     $image.setAttribute("id", "1");
-    $image.setAttribute("src", $LocalImagePath);
+    if ($IconUri) {
+        $image.setAttribute("src", $IconUri);
+    }
+    else {
+        $LocalImagePath = $PSScriptRoot.ToString().Replace("\Public\Imported", "\assets\psyduck.webp")
+        $image.setAttribute("src", $LocalImagePath);
+    }
     $image.setAttribute("alt", "Psyduck Icon");
     $image.setAttribute("placement", "hero");
     $RawXml.toast.visual.binding.AppendChild($image) > $null
@@ -40,13 +54,13 @@
         $Toast = [Windows.UI.Notifications.ToastNotification]::new($SerializedXml)
     }
 
-    $Toast.Tag = "PowerShell"
-    $Toast.Group = "PowerShell"
+    $Toast.Tag = $Tag
+    $Toast.Group = $Group
     $Toast.ExpirationTime = [DateTimeOffset]::Now.AddMinutes(1)
 
 
 
-    $Notifier = [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier("PowerShell")
+    $Notifier = [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier($Group)
     if ($Schedule) {
         $Notifier.addToSchedule($Toast);
         return;
