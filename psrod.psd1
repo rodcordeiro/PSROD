@@ -21,7 +21,7 @@
     # DotNetFrameworkVersion = ''
     # CLRVersion = ''
     # ProcessorArchitecture = ''
-    RequiredModules   = @('NameIT', 'PSRabbitMQ')
+    RequiredModules   = @('NameIT')
     # RequiredAssemblies = @()
     # ScriptsToProcess  = @('private/classes.ps1', 'private/preventiva.ps1')
     # TypesToProcess = @()
@@ -43,7 +43,7 @@
             # A URL to the main website for this project.
             ProjectUri = 'https://github.com/rodcordeiro/PSROD'
             # A URL to an icon representing this module.
-            IconUri    = 'https://raw.githubusercontent.com/rodcordeiro/PSROD/main/assets/pda_logo.png'
+            IconUri    = 'https://raw.githubusercontent.com/rodcordeiro/PSROD/main/assets/psyduck.webp'
             # ReleaseNotes of this module
             # ReleaseNotes = ''
             # Prerelease string of this module

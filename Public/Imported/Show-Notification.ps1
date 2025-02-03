@@ -1,69 +1,89 @@
 ﻿function Show-Notification {
     [cmdletbinding()]
     Param (
-        [string]
-        $ToastTitle,
-        [string]
-        [parameter(ValueFromPipeline)]
-        $ToastText,
-        [datetime]
-        [parameter(ValueFromPipeline, Mandatory = $false)]
-        $Schedule,
-        [string]
-        [parameter(ValueFromPipeline, Mandatory = $false)]
-        $IconUri,
-        [string]
-        [parameter(ValueFromPipeline, Mandatory = $false)]
-        $Group = "Powershell",
-        [string]
-        [parameter(ValueFromPipeline, Mandatory = $false)]
-        $Tag = "Powershell"
+        [string] $ToastTitle,
+        [string] [parameter(ValueFromPipeline)] $ToastText,
+        [datetime] [parameter(ValueFromPipeline, Mandatory = $false)] $Schedule,
+        [string] [parameter(ValueFromPipeline, Mandatory = $false)] $IconUri,
+        [string] [parameter(ValueFromPipeline, Mandatory = $false)] $Group = "Powershell",
+        [string] [parameter(ValueFromPipeline, Mandatory = $false)] $Tag = "Powershell"
     )
 
-    # https://den.dev/blog/powershell-windows-notification/
-    [Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] > $null
-    $Template = [Windows.UI.Notifications.ToastNotificationManager]::GetTemplateContent([Windows.UI.Notifications.ToastTemplateType]::ToastImageAndText02)
+    try {
+        $TempImagePath = ""
 
-    $RawXml = [xml] $Template.GetXml()
-    ($RawXml.toast.visual.binding.text | Where-Object { $_.id -eq "1" }).AppendChild($RawXml.CreateTextNode($ToastTitle)) > $null
-    ($RawXml.toast.visual.binding.text | Where-Object { $_.id -eq "2" }).AppendChild($RawXml.CreateTextNode($ToastText)) > $null
+        # Se for uma URL remota, baixa a imagem localmente
+        if ($IconUri -match "^https?:\/\/") {
+            $TempImagePath = "$env:TEMP\toast_image.png"
+            try {
+                Invoke-WebRequest -Uri $IconUri -OutFile $TempImagePath -ErrorAction Stop
+                $IconUri = "file:///$($TempImagePath -replace '\\', '/')"
+                Write-Host "✔️ Imagem remota baixada para: $TempImagePath"
+            }
+            catch {
+                Write-Host "⚠️ Erro ao baixar a imagem remota: $_.Message"
+                $IconUri = ""
+            }
+        }
+        # Definição da imagem padrão local
+        if (-not $IconUri) {
+            $LocalImagePath = "$PSScriptRoot\psyduck.webp".Replace("\Public\Imported\", "\assets\")
+            if (Test-Path $LocalImagePath) {
+                $IconUri = "file:///$($LocalImagePath -replace '\\', '/')"
+            }
+            else {
+                Write-Host "⚠️ Arquivo de imagem local não encontrado: $LocalImagePath"
+            }
+        }
 
+        # Validação da URI da imagem
+        if ($IconUri -and $IconUri -notmatch "^(https?:\/\/|file:\/\/\/)") {
+            throw "O caminho da imagem '$IconUri' não é válido. Use um URL HTTPS ou um caminho local válido."
+        }
 
+        # Criando XML da notificação
+        $ToastXml = @"
+<toast activationType="protocol">
+    <visual>
+        <binding template='ToastGeneric'>
+            <text>$ToastTitle</text>
+            <text>$ToastText</text>
+            <image placement='appLogoOverride' src='$IconUri' alt='Notification Icon'/>
+        </binding>
+    </visual>
+</toast>
+"@
 
-    $image = ($RawXml.toast.visual.binding.image | Where-Object { $_.id -eq "1" })
-    $image.setAttribute("id", "1");
-    if ($IconUri) {
-        $image.setAttribute("src", $IconUri);
+        # Criar documento XML
+        $XmlDoc = New-Object Windows.Data.Xml.Dom.XmlDocument
+        $XmlDoc.LoadXml($ToastXml)
+
+        # Criar a notificação
+        if ($Schedule) {
+            $Toast = [Windows.UI.Notifications.ScheduledToastNotification]::new($XmlDoc, $Schedule)
+            $Toast.Id = 'scheduled_toast'
+        }
+        else {
+            $Toast = [Windows.UI.Notifications.ToastNotification]::new($XmlDoc)
+        }
+
+        $Toast.Tag = $Tag
+        $Toast.Group = $Group
+        $Toast.ExpirationTime = [DateTimeOffset]::Now.AddMinutes(1)
+
+        # Criar e exibir a notificação
+        $Notifier = [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier($Group)
+        if ($Schedule) {
+            $Notifier.addToSchedule($Toast)
+        }
+        else {
+            $Notifier.Show($Toast)
+        }
+
+        Write-Host "✅ Notificação enviada com sucesso!"
+
     }
-    else {
-        $LocalImagePath = $PSScriptRoot.ToString().Replace("\Public\Imported", "\assets\psyduck.webp")
-        $image.setAttribute("src", $LocalImagePath);
+    catch {
+        Write-Host "❌ Erro ao enviar a notificação: $_"
     }
-    $image.setAttribute("alt", "Psyduck Icon");
-    $image.setAttribute("placement", "hero");
-    $RawXml.toast.visual.binding.AppendChild($image) > $null
-
-    $SerializedXml = New-Object Windows.Data.Xml.Dom.XmlDocument
-    $SerializedXml.LoadXml($RawXml.OuterXml)
-
-    if ($Schedule) {
-        $Toast = [Windows.UI.Notifications.ScheduledToastNotification]::new($SerializedXml, $Schedule)
-        $Toast.Id = 'scheduled_toast'
-    }
-    else {
-        $Toast = [Windows.UI.Notifications.ToastNotification]::new($SerializedXml)
-    }
-
-    $Toast.Tag = $Tag
-    $Toast.Group = $Group
-    $Toast.ExpirationTime = [DateTimeOffset]::Now.AddMinutes(1)
-
-
-
-    $Notifier = [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier($Group)
-    if ($Schedule) {
-        $Notifier.addToSchedule($Toast);
-        return;
-    }
-    $Notifier.Show($Toast);
 }
