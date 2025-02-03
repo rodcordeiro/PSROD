@@ -8,7 +8,7 @@
 
 @{
     RootModule        = '.\psrod.psm1'
-    ModuleVersion     = '1.5.2'
+    ModuleVersion     = '1.5.3'
     # CompatiblePSEditions = @()
     GUID              = '75c2e6dc-8300-44d2-9b28-f48d5d35cf64'
     Author            = 'Rodrigo Cordeiro'
@@ -21,7 +21,7 @@
     # DotNetFrameworkVersion = ''
     # CLRVersion = ''
     # ProcessorArchitecture = ''
-    RequiredModules   = @('NameIT')
+    RequiredModules   = @('NameIT', 'PSRabbitMq')
     # RequiredAssemblies = @()
     # ScriptsToProcess  = @('private/classes.ps1', 'private/preventiva.ps1')
     # TypesToProcess = @()

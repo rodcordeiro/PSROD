@@ -1,8 +1,8 @@
 ﻿function Show-Notification {
     [cmdletbinding()]
     Param (
-        [string] $ToastTitle,
-        [string] [parameter(ValueFromPipeline)] $ToastText,
+        [string] $ToastTitle = "Powershell",
+        [string] [parameter(ValueFromPipeline)] $ToastText = "Powershell, Uma notificação do",
         [datetime] [parameter(ValueFromPipeline, Mandatory = $false)] $Schedule,
         [string] [parameter(ValueFromPipeline, Mandatory = $false)] $IconUri,
         [string] [parameter(ValueFromPipeline, Mandatory = $false)] $Group = "Powershell",
@@ -18,10 +18,10 @@
             try {
                 Invoke-WebRequest -Uri $IconUri -OutFile $TempImagePath -ErrorAction Stop
                 $IconUri = "file:///$($TempImagePath -replace '\\', '/')"
-                Write-Host "✔️ Imagem remota baixada para: $TempImagePath"
+                Write-Output " Imagem remota baixada para: $TempImagePath"
             }
             catch {
-                Write-Host "⚠️ Erro ao baixar a imagem remota: $_.Message"
+                Write-Output " Erro ao baixar a imagem remota: $_.Message"
                 $IconUri = ""
             }
         }
@@ -32,7 +32,7 @@
                 $IconUri = "file:///$($LocalImagePath -replace '\\', '/')"
             }
             else {
-                Write-Host "⚠️ Arquivo de imagem local não encontrado: $LocalImagePath"
+                Write-Output "Arquivo de imagem local não encontrado: $LocalImagePath"
             }
         }
 
@@ -79,11 +79,8 @@
         else {
             $Notifier.Show($Toast)
         }
-
-        Write-Host "✅ Notificação enviada com sucesso!"
-
     }
     catch {
-        Write-Host "❌ Erro ao enviar a notificação: $_"
+        Write-Error " Erro ao enviar a notificação: $_"
     }
 }
