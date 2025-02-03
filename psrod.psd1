@@ -8,12 +8,12 @@
 
 @{
     RootModule        = '.\psrod.psm1'
-    ModuleVersion     = '1.5.0'
+    ModuleVersion     = '1.5.2'
     # CompatiblePSEditions = @()
     GUID              = '75c2e6dc-8300-44d2-9b28-f48d5d35cf64'
     Author            = 'Rodrigo Cordeiro'
     CompanyName       = 'RodCordeiro'
-    Copyright         = '(c) 2023 Rodrigo Cordeiro. Todos os direitos reservados.'
+    Copyright         = '(c) 2025 Rodrigo Cordeiro. Todos os direitos reservados.'
     Description       = 'Module for automating daily tasks'
     PowerShellVersion = '5.1'
     # PowerShellHostName = ''
@@ -21,7 +21,7 @@
     # DotNetFrameworkVersion = ''
     # CLRVersion = ''
     # ProcessorArchitecture = ''
-    RequiredModules   = @('NameIT', 'PSRabbitMq')
+    RequiredModules   = @('NameIT', 'PSRabbitMQ')
     # RequiredAssemblies = @()
     # ScriptsToProcess  = @('private/classes.ps1', 'private/preventiva.ps1')
     # TypesToProcess = @()
