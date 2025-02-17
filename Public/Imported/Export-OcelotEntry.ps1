@@ -24,6 +24,9 @@ function Export-OcelotEntry {
                         "X-Paginacao-Total-Itens",
                         "X-Paginacao-Total-Paginas"
                     )
+                };
+                "RateLimitOptions"     = @{
+                    "QuotaExceededMessage" = "Limite de consultas por segundo excedida! Aguarde e tente novamente mais tarde.";
                 }
             }
         }
