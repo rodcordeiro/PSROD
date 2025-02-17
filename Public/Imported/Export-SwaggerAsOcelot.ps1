@@ -58,7 +58,8 @@ function Export-SwaggerAsOcelot {
                     "Period"               = "1s"; # seconds; minutes; hours; days
                     "PeriodTimespan"       = 30; # only seconds
                     "Limit"                = 15;
-                    "QuotaExceededMessage" = "Limite de consultas por segundo excedida! Aguarde e tente novamente mais tarde."
+                    "QuotaExceededMessage" = "Limite de consultas por segundo excedida! Aguarde e tente novamente mais tarde.";
+                    
                 }
             }
         }
