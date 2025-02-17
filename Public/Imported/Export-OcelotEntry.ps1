@@ -27,6 +27,9 @@ function Export-OcelotEntry {
                 };
                 "RateLimitOptions"     = @{
                     "QuotaExceededMessage" = "Limite de consultas por segundo excedida! Aguarde e tente novamente mais tarde.";
+                    "ClientWhitelist"      = @(
+                        "10.252.6.77"
+                    ); # array of strings
                 }
             }
         }
