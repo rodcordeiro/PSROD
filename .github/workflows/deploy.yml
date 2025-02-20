@@ -59,4 +59,6 @@ jobs:
           RABBIT_EXCHANGE_NAME: ${{ secrets.RABBIT_EXCHANGE_NAME }}
           ROUTING_KEY: ${{ secrets.ROUTING_KEY }}
           MESSAGE: ${{ secrets.RABBIT_MESSAGE }}
+          RABBIT_USE_SSL: false
+
  
