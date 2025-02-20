@@ -45,7 +45,7 @@ function Notify {
         # $msgImage = 'Question'
         # $Result = [System.Windows.MessageBox]::Show($msgBody,$msgTitle,$msgButton,$msgImage)
         # Write-Host "The user chose: $Result [" ($result).value__ "]"
-        if (!$Quiet) {
+        if (-not $Quiet) {
             # [console]::beep(440, 1000)
             (New-Object System.Media.SoundPlayer "C:\Windows\Media\chimes.wav").Play()
         }

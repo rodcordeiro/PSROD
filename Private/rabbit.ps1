@@ -66,7 +66,6 @@
 
     # Notifica todos os observadores registrados
     [void]  NotifyObservers($message) {
-        Write-Host $message
         foreach ($observer in $this.Observers) {
             $observer.Invoke($this, $message)
         }

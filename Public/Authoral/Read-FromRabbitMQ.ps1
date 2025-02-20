@@ -33,11 +33,11 @@ function Read-FromRabbitMQ {
     )
     begin {
         class NotificationHandler {
-            [void] Handler($listener, $params) {
-
-                [RabbitMessage]$message = $params;
-                # Write-Host "Running $($listener.Running)"
+            [void] Handler($listener, $message) {
                 if ($message.type -eq 'notification') {
+                    Write-Host "[notifications][$([DateTime]::UtcNow.ToString())] " -ForegroundColor Green -NoNewline 
+                    Write-Host "[$($message.title)] " -NoNewline -ForegroundColor Cyan
+                    Write-Host $message.description
                     $message_params = @{
                         ToastTitle = $message.title;
                         ToastText  = $message.description;
@@ -51,13 +51,17 @@ function Read-FromRabbitMQ {
         }
 
         class ActionsHandler {
-            [void] Handler($listener, $params) {
-                [RabbitMessage]$message = $params;
+            [void] Handler($listener, $message) {
+               
                 if ($message.type -eq 'action') {
                     $message.actions | ForEach-Object {
                         $action = $_.action
+                        Write-Host "[actions][$([DateTime]::UtcNow.ToString())] " -ForegroundColor Green -NoNewline 
+                        Write-Host "[$($_.name)] " -NoNewline -ForegroundColor Cyan
+                        Write-Host $action 
                         $scriptBlock = [Scriptblock]::Create($action)
-                        $scriptBlock.Invoke()
+                        $scriptBlock.InvokeReturnAsIs() 
+
                     }
                 }
             }
@@ -78,9 +82,12 @@ function Read-FromRabbitMQ {
     process {
         $handleRabbitMessage = {
             param($listener, $params)
+            Write-Host $params;
 
-            $notificationHandler.Handler($listener, $params)
-            $actionsHandler.Handler($listener, $params)
+            [RabbitMessage]$message = $params;
+
+            $notificationHandler.Handler($listener, $message)
+            $actionsHandler.Handler($listener, $message)
         }
 
         $receiver.RegisterObserver($handleRabbitMessage)
