@@ -58,15 +58,5 @@ jobs:
           RABBIT_QUEUE_NAME: ${{ secrets.RABBIT_QUEUE_NAME }}
           RABBIT_EXCHANGE_NAME: ${{ secrets.RABBIT_EXCHANGE_NAME }}
           ROUTING_KEY: ${{ secrets.ROUTING_KEY }}
-          RABBIT_MESSAGE: ${{ secrets.RABBIT_MESSAGE }}
-          
-          
-          # # Name for the queue
-          # RABBIT_QUEUE_NAME: # optional
-          # # Name for the exchange
-          # RABBIT_EXCHANGE_NAME: # optional
-          # # Message to be sent
-          # # Routing key for the message
-          # ROUTING_KEY: # optional
-          # # Durability for the queue
-          # DURABLE: # optional
+          MESSAGE: ${{ secrets.RABBIT_MESSAGE }}
+ 
