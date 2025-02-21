@@ -30,6 +30,7 @@ jobs:
           Set-PSRepository PSGallery -InstallationPolicy Trusted
           Install-Module NameIT -ErrorAction Stop
           Install-Module CredentialManager -ErrorAction Stop
+          Install-Module PSRabbitMQ -ErrorAction Stop
       - name: Lint with PSScriptAnalyzer
         shell: pwsh
         run: |
