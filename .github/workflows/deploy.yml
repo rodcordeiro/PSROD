@@ -56,9 +56,22 @@ jobs:
           $queue = "Powershell"
           $username = "${{ secrets.RABBIT_USERNAME }}"
           $password = "${{ secrets.RABBIT_PASSWORD }}"
-          $message = "${{ secrets.RABBIT_MESSAGE }}"
+          $message = [pscustomobject]@{
+            type        = "action";
+            title       = "Nova versão do PSRod";
+            description = "Nova versão do psrod a ser instalada";
+            actions     = @(
+                @{
+                    name   = "reinstall-module";
+                    action = "Install-Module psrod -scope CurrentUser";
+                },
+                @{
+                    name   = "notify";
+                    action = "Show-Notification -ToastTitle PSROD `"Nova versão do psrod a ser instalada`"";
+                }
+            )
+          }
           $strPass = ConvertTo-SecureString -String $password -AsPlainText -Force
           $Cred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList ($username, $strPass)
           New-RabbitMqConnectionFactory -ComputerName $hostname -Credential $Cred -Port ${{ secrets.RABBIT_PORT }} | Out-Null
           Send-RabbitMQMessage -Exchange ${{ secrets.RABBIT_EXCHANGE_NAME }} -Key ${{ secrets.ROUTING_KEY }} -InputObject $($message | ConvertTo-Json -depth 10 -Compress ) -Credential $Cred -ComputerName $hostname -Port ${{ secrets.RABBIT_PORT }}
-          
