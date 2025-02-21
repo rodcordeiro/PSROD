@@ -1,11 +1,11 @@
 ---
 external help file: psrod-help.xml
 Module Name: psrod
-online version: http://gallery.technet.microsoft.com/Get-UserSessions-Parse-b4c97837
+online version: https://github.com/rodcordeiro/PSROD/blob/main/Public/Authoral/Preventive.ps1
 schema: 2.0.0
 ---
 
-# Invoke-TextToSpeech
+# Write-ToChat
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
@@ -13,7 +13,7 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Invoke-TextToSpeech [-texto] <String[]> [<CommonParameters>]
+Write-ToChat [-content] <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,11 +30,11 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -texto
-{{ Fill texto Description }}
+### -content
+{{ Fill content Description }}
 
 ```yaml
-Type: String[]
+Type: String
 Parameter Sets: (All)
 Aliases:
 
@@ -50,7 +50,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.String[]
+### System.String
 
 ## OUTPUTS
 

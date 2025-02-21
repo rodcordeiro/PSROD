@@ -5,7 +5,7 @@ online version: https://github.com/rodcordeiro/PSROD/blob/main/Public/Authoral/P
 schema: 2.0.0
 ---
 
-# Show-Notification
+# Read-FromRabbitMQ
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
@@ -13,8 +13,8 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Show-Notification [[-ToastTitle] <String>] [[-ToastText] <String>] [[-Schedule] <DateTime>]
- [[-IconUri] <String>] [[-Group] <String>] [[-Tag] <String>] [<CommonParameters>]
+Read-FromRabbitMQ [[-QueueName] <String>] [[-Exchange] <String>] [[-ExchangeType] <String>]
+ [[-RoutingKey] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -31,68 +31,8 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -Group
-{{ Fill Group Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 4
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -IconUri
-{{ Fill IconUri Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 3
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -Schedule
-{{ Fill Schedule Description }}
-
-```yaml
-Type: DateTime
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 2
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -Tag
-{{ Fill Tag Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 5
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -ToastText
-{{ Fill ToastText Description }}
+### -Exchange
+{{ Fill Exchange Description }}
 
 ```yaml
 Type: String
@@ -102,12 +42,27 @@ Aliases:
 Required: False
 Position: 1
 Default value: None
-Accept pipeline input: True (ByValue)
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -ToastTitle
-{{ Fill ToastTitle Description }}
+### -ExchangeType
+{{ Fill ExchangeType Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 2
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -QueueName
+{{ Fill QueueName Description }}
 
 ```yaml
 Type: String
@@ -117,7 +72,22 @@ Aliases:
 Required: False
 Position: 0
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -RoutingKey
+{{ Fill RoutingKey Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 3
+Default value: None
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -127,8 +97,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.String
-
-### System.DateTime
 
 ## OUTPUTS
 

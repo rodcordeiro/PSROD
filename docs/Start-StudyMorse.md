@@ -1,11 +1,11 @@
 ---
 external help file: psrod-help.xml
 Module Name: psrod
-online version: https://github.com/fleschutz/PowerShell
+online version: https://github.com/rodcordeiro/PSROD/blob/main/Public/Authoral/Preventive.ps1
 schema: 2.0.0
 ---
 
-# Get-RandomSecret
+# Start-StudyMorse
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
@@ -13,7 +13,7 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Get-RandomSecret
+Start-StudyMorse
 ```
 
 ## DESCRIPTION

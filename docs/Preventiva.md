@@ -54,8 +54,8 @@ Execute preventive scripts on computer, cleaning temp files, trash and running r
 ## PARAMETERS
 
 ### -Complete
-Executa o processo completo, incluindo dism, sfc, instala § £o de atualiza § µes e limpeza.
-Caso o reboot seja passado, a limpeza n £o ser ¡ executada.;
+Executa o processo completo, incluindo dism, sfc, instalação de atualizações e limpeza.
+Caso o reboot seja passado, a limpeza não será executada.;
 
 ```yaml
 Type: SwitchParameter
@@ -85,7 +85,7 @@ Accept wildcard characters: False
 ```
 
 ### -DiskEvents
-Verifica se h ¡ eventos de disco;
+Verifica se há eventos de disco;
 
 ```yaml
 Type: SwitchParameter
@@ -100,7 +100,7 @@ Accept wildcard characters: False
 ```
 
 ### -Updates
-Executa a instala § £o de atualiza § µes;
+Executa a instalação de atualizações;
 
 ```yaml
 Type: SwitchParameter
@@ -115,7 +115,7 @@ Accept wildcard characters: False
 ```
 
 ### -Reboot
-Reinicia o computador ao finalizar a execu § £o do script
+Reinicia o computador ao finalizar a execução do script
 
 ```yaml
 Type: SwitchParameter

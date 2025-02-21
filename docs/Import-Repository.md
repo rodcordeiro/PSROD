@@ -5,7 +5,7 @@ online version: http://gallery.technet.microsoft.com/Get-UserSessions-Parse-b4c9
 schema: 2.0.0
 ---
 
-# Invoke-TextToSpeech
+# Import-Repository
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
@@ -13,7 +13,7 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Invoke-TextToSpeech [-texto] <String[]> [<CommonParameters>]
+Import-Repository [[-Repos] <Object>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,18 +30,18 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -texto
-{{ Fill texto Description }}
+### -Repos
+{{ Fill Repos Description }}
 
 ```yaml
-Type: String[]
+Type: Object
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 0
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -50,7 +50,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.String[]
+### System.Object
 
 ## OUTPUTS
 

@@ -27,7 +27,7 @@ all official requirements but also performs a couple extra tests.
 It's purpose is to provide a foundation to
 add upon to for your own "requirements" for the Gallery.
 
-Each run will ensure a module manifest is in the same folder as the ModuleFilePath and will ensure that manifest 
+Each run will ensure a module manifest is in the same folder as the ModuleFilePath and will ensure that manifest
 has all of the required keys.
 Also, it will run Test-ModuleManifest to ensure the result passes there as well.
 
@@ -51,7 +51,7 @@ This example assumes that you've included a default value for the NuGetApiKey.
 
 ### -ModuleFilePath
 A mandatory string parameter representing the file path to a PSM1 file.
-The folder path also represents the 
+The folder path also represents the
 folder that will be searched for a matching module manifest as well.
 
 ```yaml

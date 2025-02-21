@@ -13,7 +13,7 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Invoke-TextAsMorseCode [-text] <String> [<CommonParameters>]
+Invoke-TextAsMorseCode [-text] <String> [-Beep] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -22,13 +22,28 @@ Invoke-TextAsMorseCode [-text] <String> [<CommonParameters>]
 ## EXAMPLES
 
 ### Example 1
-```
+```powershell
 PS C:\> {{ Add example code here }}
 ```
 
 {{ Add example description here }}
 
 ## PARAMETERS
+
+### -Beep
+{{ Fill Beep Description }}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Nomeado
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -text
 {{ Fill text Description }}
@@ -51,6 +66,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.String
+
 ## OUTPUTS
 
 ### System.Object

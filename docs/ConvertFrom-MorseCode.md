@@ -1,7 +1,7 @@
 ---
 external help file: psrod-help.xml
 Module Name: psrod
-online version: https://github.com/jeffpatton1971/mod-posh/wiki/MySQL#Connect-MySqlServer
+online version: https://github.com/rodcordeiro/PSROD/blob/main/Public/Authoral/CalcularSaida.ps1
 schema: 2.0.0
 ---
 

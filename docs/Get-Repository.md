@@ -5,7 +5,7 @@ online version: https://github.com/fleschutz/PowerShell
 schema: 2.0.0
 ---
 
-# Get-RandomSecret
+# Get-Repository
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
@@ -13,7 +13,7 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Get-RandomSecret
+Get-Repository [-AsJson]
 ```
 
 ## DESCRIPTION
@@ -29,6 +29,21 @@ PS C:\> {{ Add example code here }}
 {{ Add example description here }}
 
 ## PARAMETERS
+
+### -AsJson
+{{ Fill AsJson Description }}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Nomeado
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 

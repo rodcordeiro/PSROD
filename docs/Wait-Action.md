@@ -18,7 +18,7 @@ Wait-Action [-Condition] <ScriptBlock> [-Timeout] <Int32> [[-ArgumentList] <Obje
 ```
 
 ## DESCRIPTION
-This script executes a scriptblock represented by the Condition parameter continually while the result returns 
+This script executes a scriptblock represented by the Condition parameter continually while the result returns
 anything other than $false or $null.
 
 ## EXAMPLES
@@ -34,7 +34,7 @@ This example will wait for all background jobs to complete for up to 10 seconds.
 
 ### -Condition
 A mandatory scriptblock parameter representing the code to execute to check the action condition.
-This code 
+This code
 will be continually executed until it returns $false or $null.
 
 ```yaml
@@ -66,7 +66,7 @@ Accept wildcard characters: False
 
 ### -ArgumentList
 An optional collection of one or more objects to pass to the scriptblock at run time.
-To use this parameter, 
+To use this parameter,
 be sure you have a param() block in the Condition scriptblock to accept these parameters.
 
 ```yaml

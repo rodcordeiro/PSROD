@@ -1,11 +1,11 @@
 ---
 external help file: psrod-help.xml
 Module Name: psrod
-online version: http://gallery.technet.microsoft.com/Get-UserSessions-Parse-b4c97837
+online version: https://github.com/rodcordeiro/PSROD/blob/main/Public/Authoral/Discord.ps1
 schema: 2.0.0
 ---
 
-# Invoke-Loop
+# Export-OcelotEntry
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
@@ -13,7 +13,7 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Invoke-Loop [[-seconds] <Int32>] [[-action] <ScriptBlock>]
+Export-OcelotEntry [[-keys] <OcelotEntryKeys[]>] [-Prod]
 ```
 
 ## DESCRIPTION
@@ -30,26 +30,26 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -action
-{{ Fill action Description }}
+### -Prod
+{{ Fill Prod Description }}
 
 ```yaml
-Type: ScriptBlock
+Type: SwitchParameter
 Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 1
+Position: Nomeado
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -seconds
-{{ Fill seconds Description }}
+### -keys
+{{ Fill keys Description }}
 
 ```yaml
-Type: Int32
+Type: OcelotEntryKeys[]
 Parameter Sets: (All)
 Aliases:
 

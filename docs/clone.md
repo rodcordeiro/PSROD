@@ -13,7 +13,7 @@ Function to customize repositories cloning with some validations.
 ## SYNTAX
 
 ```
-clone [[-Path] <String>] [[-Alias] <String>] [[-Folder] <String>] [-confirm] [<CommonParameters>]
+clone [[-Path] <String>] [[-Alias] <String>] [[-Folder] <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -95,17 +95,33 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -confirm
-Please, enter the repository link for download
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
-Aliases: y, yes
+Aliases: wi
 
 Required: False
 Position: Named
-Default value: False
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

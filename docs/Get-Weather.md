@@ -22,7 +22,7 @@ Get-Weather [-Complete]
 ## EXAMPLES
 
 ### Example 1
-```
+```powershell
 PS C:\> {{ Add example code here }}
 ```
 
@@ -40,7 +40,7 @@ Aliases:
 
 Required: False
 Position: Nomeado
-Default value: False
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -48,6 +48,7 @@ Accept wildcard characters: False
 ## INPUTS
 
 ### Nenhum
+
 ## OUTPUTS
 
 ### System.Object

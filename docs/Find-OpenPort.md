@@ -5,82 +5,34 @@ online version: https://github.com/fleschutz/PowerShell
 schema: 2.0.0
 ---
 
-# ConvertTo-MarkdownTable
+# Find-OpenPort
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Scans the network for open/closed ports
 
 ## SYNTAX
 
 ```
-ConvertTo-MarkdownTable [-Columns] <String[]> [[-RowsLabel] <String[]>] [-Rows] <PSObject[]>
- [[-OutFile] <String>] [<CommonParameters>]
+Find-OpenPort [[-Network] <String>] [[-Ips] <String[]>] [[-Ports] <Int32[]>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+This PowerShell script scans the network for open or closed ports.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXEMPLO 1
 ```
-
-{{ Add example description here }}
+./scan-ports
+```
 
 ## PARAMETERS
 
-### -Columns
-{{ Fill Columns Description }}
-
-```yaml
-Type: String[]
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 0
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -OutFile
-{{ Fill OutFile Description }}
+### -Network
+{{ Fill Network Description }}
 
 ```yaml
 Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 3
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -Rows
-{{ Fill Rows Description }}
-
-```yaml
-Type: PSObject[]
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 2
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -RowsLabel
-{{ Fill RowsLabel Description }}
-
-```yaml
-Type: String[]
 Parameter Sets: (All)
 Aliases:
 
@@ -91,20 +43,47 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
+### -Ips
+{{ Fill Ips Description }}
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 2
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Ports
+{{ Fill Ports Description }}
+
+```yaml
+Type: Int32[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 3
+Default value: @(8080)
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### System.String[]
-
-### System.Management.Automation.PSObject[]
-
-### System.String
-
 ## OUTPUTS
 
-### System.Object
 ## NOTES
+Author: Markus Fleschutz / License: CC0
 
 ## RELATED LINKS
+
+[https://github.com/fleschutz/PowerShell](https://github.com/fleschutz/PowerShell)
+
