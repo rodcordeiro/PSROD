@@ -48,6 +48,17 @@ jobs:
         shell: pwsh
         run: |
           Publish-Module -Name .\psrod.psd1 -NuGetApiKey $env:NUGET_KEY
-      
-
- 
+       # Passo final: Enviar mensagem para RabbitMQ
+      - name: Enviar mensagem para RabbitMQ
+        shell: pwsh
+        run: |
+          $hostname = "${{ secrets.RABBIT_HOST }}"
+          $queue = "Powershell"
+          $username = "${{ secrets.RABBIT_USERNAME }}"
+          $password = "${{ secrets.RABBIT_PASSWORD }}"
+          $message = "${{ secrets.RABBIT_MESSAGE }}"
+          $strPass = ConvertTo-SecureString -String $password -AsPlainText -Force
+          $Cred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList ($username, $strPass)
+          New-RabbitMqConnectionFactory -ComputerName $hostname -Credential $Cred -Port ${{ secrets.RABBIT_PORT }} | Out-Null
+          Send-RabbitMQMessage -Exchange ${{ secrets.RABBIT_EXCHANGE_NAME }} -Key ${{ secrets.ROUTING_KEY }} -InputObject $($message | ConvertTo-Json -depth 10 -Compress ) -Credential $Cred -ComputerName $hostname -Port ${{ secrets.RABBIT_PORT }}
+          
