@@ -15,10 +15,14 @@ function Write-ToChat {
         [string]$content
     )
     begin {
+        $Cred = Get-StoredCredential -Target "RABBITMQ"
+        if (-not $Cred) {
+            $Cred = Get-Credential
+            New-StoredCredential -Target "RABBITMQ" -UserName $Cred.UserName -Password $Cred.GetNetworkCredential().Password -Persist LocalMachine
+        }
+
         [ChatAuthor]$author = [ChatAuthor]::new()
-        $author.username = $env:RabbitMQ_User
-        $strPass = ConvertTo-SecureString -String $env:RabbitMQ_Password -AsPlainText -Force
-        $Cred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList ($env:RabbitMQ_User, $strPass)
+        $author.username = $Cred.UserName
 
         New-RabbitMqConnectionFactory -ComputerName 82.180.136.148 -Credential $Cred -Port 3340 | Out-Null
     }

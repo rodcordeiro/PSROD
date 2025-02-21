@@ -70,14 +70,7 @@ function Read-FromRabbitMQ {
         $receiver = New-Object MessagesReceiver
         $notificationHandler = New-Object NotificationHandler
         $actionsHandler = New-Object ActionsHandler
-        if ($null -eq $env:RabbitMQ_User) {
-            throw "Voce deve criar as variaveis de usuario e senha da conexao ao rabbit no seu perfil powershell antes de utilizar este commando!
-
-            Crie as variaves abaixo:
-            [string]$env:RabbitMQ_User = 'username'
-            [string]$env:RabbitMQ_Password = 'userpassword'
-            "
-        }
+        
     }
     process {
         $handleRabbitMessage = {
