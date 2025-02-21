@@ -46,19 +46,6 @@ jobs:
         shell: pwsh
         run: |
           Publish-Module -Name .\psrod.psd1 -NuGetApiKey $env:NUGET_KEY
-      - name: RabbitMQ Message Sender
-        # You may pin to the exact commit or the version.
-        # uses: eferraris/rabbit-sender@65a0f69668c2b9d34b442d1b9374983c815e2c01
-        uses: eferraris/rabbit-sender@v1.4
-        with:
-          RABBIT_USERNAME: ${{ secrets.RABBIT_USERNAME }}
-          RABBIT_PASSWORD: ${{ secrets.RABBIT_PASSWORD }}
-          RABBIT_HOST: ${{ secrets.RABBIT_HOST }}
-          RABBIT_PORT: ${{ secrets.RABBIT_PORT }}
-          RABBIT_QUEUE_NAME: ${{ secrets.RABBIT_QUEUE_NAME }}
-          RABBIT_EXCHANGE_NAME: ${{ secrets.RABBIT_EXCHANGE_NAME }}
-          ROUTING_KEY: ${{ secrets.ROUTING_KEY }}
-          MESSAGE: ${{ secrets.RABBIT_MESSAGE }}
-          RABBIT_USE_SSL: false
+      
 
  
