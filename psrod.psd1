@@ -8,7 +8,7 @@
 
 @{
     RootModule        = '.\psrod.psm1'
-    ModuleVersion     = '1.8.3'
+    ModuleVersion     = '1.9.0'
     # CompatiblePSEditions = @()
     GUID              = '75c2e6dc-8300-44d2-9b28-f48d5d35cf64'
     Author            = 'Rodrigo Cordeiro'
@@ -56,6 +56,4 @@
     } # End of PrivateData hashtable
     HelpInfoURI       = 'https://raw.githubusercontent.com/rodcordeiro/PSROD/main/psrod-help.xml'
     # DefaultCommandPrefix = ''
-
 }
-

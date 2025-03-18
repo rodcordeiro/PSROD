@@ -63,7 +63,7 @@ jobs:
             actions     = @(
                 @{
                     name   = "reinstall-module";
-                    action = "Install-Module psrod -scope CurrentUser";
+                    action = "Install-Module psrod -scope CurrentUser -Force";
                 },
                 @{
                     name   = "notify";
