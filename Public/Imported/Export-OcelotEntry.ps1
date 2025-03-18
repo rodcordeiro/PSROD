@@ -7,10 +7,15 @@ class OcelotEntryKeys {
 function Export-OcelotEntry {
     param(
         [OcelotEntryKeys[]]$keys,
-        [switch]$Prod
+        [switch]$Prod,
+        [string]$SourceFile,
+        [switch]$KeepExistingRoutes
     )
 
     begin {
+        if ($KeepExistingRoutes -and -not $SourceFile) {
+            throw "Invalid parameters set. KeepExistingRoutes is only available when SourceFile is informed"
+        }
         $dictionary = [PSCustomObject]@{
             Routes                = [System.Collections.ArrayList]::new();
             SwaggerEndPoints      = [System.Collections.ArrayList]::new();
@@ -27,10 +32,27 @@ function Export-OcelotEntry {
                 };
                 "RateLimitOptions"     = @{
                     "QuotaExceededMessage" = "Limite de consultas por segundo excedida! Aguarde e tente novamente mais tarde.";
-                    "ClientWhitelist"      = @(
-                        "10.252.6.77"
-                    ); # array of strings
+                    "ClientWhitelist"      = @(); # array of strings
                 }
+            }
+        }
+        if ($SourceFile) {
+            if (Test-Path $SourceFile) {
+                try {
+                    Write-Host "Carregando rotas do arquivo de origem: $SourceFile"
+                    $existingConfig = Get-Content -Path $SourceFile | ConvertFrom-Json
+                    $existingRoutes = $existingConfig.Routes | Where-Object { -not $_.SwaggerKey -or $KeepExistingRoutes }
+                    $dictionary.Routes.AddRange($existingRoutes) | Out-Null
+                    if ($KeepExistingRoutes) {
+                        $dictionary.SwaggerEndPoints.AddRange($existingConfig.SwaggerEndPoints) | Out-Null
+                    }
+                }
+                catch {
+                    Write-Error "Erro ao carregar o arquivo de origem: $_"
+                }
+            }
+            else {
+                Throw "Arquivo de origem não encontrado: $SourceFile"
             }
         }
     }
