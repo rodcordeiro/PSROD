@@ -32,7 +32,8 @@ function Export-OcelotEntry {
                 };
                 "RateLimitOptions"     = @{
                     "QuotaExceededMessage" = "Limite de consultas por segundo excedida! Aguarde e tente novamente mais tarde.";
-                    "ClientWhitelist"      = @(); # array of strings
+                    "ClientWhitelist"      = @("internal"); # array of strings
+                    "ClientIdHeader"       = "torra-client-id";
                 }
             }
         }
