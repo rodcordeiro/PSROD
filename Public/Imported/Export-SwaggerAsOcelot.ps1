@@ -53,7 +53,7 @@ function Export-SwaggerAsOcelot {
                 UpstreamHttpMethod       = $methods;
                 SwaggerKey               = $Chave;
                 "RateLimitOptions"       = @{
-                    "ClientWhitelist"      = @(); # array of strings
+                    "ClientWhitelist"      = @("internal"); # array of strings
                     "EnableRateLimiting"   = $true;
                     "Period"               = "1s"; # seconds; minutes; hours; days
                     "PeriodTimespan"       = 30; # only seconds
