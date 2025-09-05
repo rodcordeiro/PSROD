@@ -32,7 +32,6 @@ Function Connect-MySqlServer {
             Supply values for the following parameters:
             Credential
 
-
             ServerThread      : 2
             DataSource        : localhost
             ConnectionTimeout : 15

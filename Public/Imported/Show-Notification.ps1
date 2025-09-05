@@ -3,23 +3,23 @@
     Param (
         [string]
         $ToastTitle,
- 
+
         [string]
         [parameter(ValueFromPipeline)]
         $ToastText,
- 
+
         [datetime]
         [parameter(ValueFromPipeline, Mandatory = $false)]
         $Schedule,
- 
+
         [string]
         [parameter(ValueFromPipeline, Mandatory = $false)]
         $IconUri,
- 
+
         [string]
         [parameter(ValueFromPipeline, Mandatory = $false)]
         $Group = "Powershell",
- 
+
         [string]
         [parameter(ValueFromPipeline, Mandatory = $false)]
         $Tag = "Powershell"
