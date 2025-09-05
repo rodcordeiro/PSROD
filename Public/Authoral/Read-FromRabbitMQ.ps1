@@ -35,7 +35,7 @@ function Read-FromRabbitMQ {
         class NotificationHandler {
             [void] Handler($listener, $message) {
                 if ($message.type -eq 'notification') {
-                    Write-Host "[notifications][$([DateTime]::UtcNow.ToString())] " -ForegroundColor Green -NoNewline 
+                    Write-Host "[notifications][$([DateTime]::UtcNow.ToString())] " -ForegroundColor Green -NoNewline
                     Write-Host "[$($message.title)] " -NoNewline -ForegroundColor Cyan
                     Write-Host $message.description
                     $message_params = @{
@@ -52,15 +52,15 @@ function Read-FromRabbitMQ {
 
         class ActionsHandler {
             [void] Handler($listener, $message) {
-               
+
                 if ($message.type -eq 'action') {
                     $message.actions | ForEach-Object {
                         $action = $_.action
-                        Write-Host "[actions][$([DateTime]::UtcNow.ToString())] " -ForegroundColor Green -NoNewline 
+                        Write-Host "[actions][$([DateTime]::UtcNow.ToString())] " -ForegroundColor Green -NoNewline
                         Write-Host "[$($_.name)] " -NoNewline -ForegroundColor Cyan
-                        Write-Host $action 
+                        Write-Host $action
                         $scriptBlock = [Scriptblock]::Create($action)
-                        $scriptBlock.InvokeReturnAsIs() 
+                        $scriptBlock.InvokeReturnAsIs()
 
                     }
                 }
@@ -70,7 +70,7 @@ function Read-FromRabbitMQ {
         $receiver = New-Object MessagesReceiver
         $notificationHandler = New-Object NotificationHandler
         $actionsHandler = New-Object ActionsHandler
-        
+
     }
     process {
         $handleRabbitMessage = {

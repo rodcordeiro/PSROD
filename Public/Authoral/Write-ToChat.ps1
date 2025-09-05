@@ -1,4 +1,4 @@
-class ChatAuthor {
+﻿class ChatAuthor {
     [string]$username;
     [AllowNull()][string]$avatar_url;
 }
@@ -27,7 +27,7 @@ function Write-ToChat {
         New-RabbitMqConnectionFactory -ComputerName 82.180.136.148 -Credential $Cred -Port 3340 | Out-Null
     }
     process {
-        
+
         $message = [pscustomobject]@{
             content   = [String]::Join(", ", $content).Trim();
             createdAt = [datetime]::Now.ToUniversalTime();

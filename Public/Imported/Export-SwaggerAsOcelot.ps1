@@ -1,4 +1,4 @@
-function Export-SwaggerAsOcelot {
+﻿function Export-SwaggerAsOcelot {
     param(
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [int]$Porta,
@@ -59,7 +59,7 @@ function Export-SwaggerAsOcelot {
                     "PeriodTimespan"       = 30; # only seconds
                     "Limit"                = 15;
                     "QuotaExceededMessage" = "Limite de consultas por segundo excedida! Aguarde e tente novamente mais tarde.";
-                    
+
                 }
             }
         }
