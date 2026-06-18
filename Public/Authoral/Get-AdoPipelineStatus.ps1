@@ -1,88 +1,57 @@
-
-function Get-AdoPullRequestsCreatedLastWeek {
-    <#
+<#
 .SYNOPSIS
-Obtém pull requests criados em repositórios do Azure DevOps dentro de uma janela recente.
+Consulta o status de uma execução de pipeline no Azure DevOps até que ela seja concluída.
 
-.PARAMETER Organization
-Nome da organização no Azure DevOps.
-
-.PARAMETER Project
-Nome do projeto no Azure DevOps.
-
-.PARAMETER Repositories
-Lista de repositórios que serão consultados.
-
-.PARAMETER Pat
-Personal Access Token usado na autenticação Basic. Por padrão, usa a variável de ambiente PAT.
-
-.PARAMETER Status
-Status dos pull requests retornados: all, active, completed ou abandoned.
-
-.PARAMETER DaysBack
-Quantidade de dias retroativos usada para calcular a data mínima de criação.
+.PARAMETER ExecutionUrl
+URL da execução do pipeline no Azure DevOps, contendo o buildId na rota de resultados.
 
 .OUTPUTS
-PSCustomObject com repositório, identificador, título, descrição, status, autor, data de criação, branches e URL do pull request.
+PSCustomObject com identificador da build, status, resultado, horário de entrada na fila, início e término.
+
+.NOTES
+Usa a variável de ambiente PAT para autenticação Basic na API de builds do Azure DevOps.
 #>
+function Get-AdoPipelineStatus {
     [CmdletBinding()]
-    param(
-        [Parameter(Mandatory)]
-        [string] $Organization,
-        [Parameter(Mandatory)]
-        [string] $Project,
-        [Parameter(Mandatory)]
-        [string[]] $Repositories,
-        [string] $Pat = $env:PAT,
-        [ValidateSet('all', 'active', 'completed', 'abandoned')]
-        [string] $Status = 'all',
-        [int] $DaysBack = 7
+    param (
+        [Parameter(Mandatory = $true)]
+        [string]$ExecutionUrl
     )
-    if ([string]::IsNullOrWhiteSpace($Pat)) {
-        throw "Informe o PAT via -Pat ou variável de ambiente PAT."
-    }
-    $token = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$Pat"))
-    $headers = @{ Authorization = "Basic $token"; Accept = "application/json" }
-    $since = (Get-Date).AddDays(-$DaysBack).ToUniversalTime().ToString("o")
-    foreach ($repo in $Repositories) {
-        $skip = 0
-        $top = 100
-        do {
-            $query = @{
-                "api-version"                       = "7.1"
-                "searchCriteria.status"             = $Status
-                "searchCriteria.minTime"            = $since
-                "searchCriteria.queryTimeRangeType" = "Created"
-                "`$top"                             = $top
-                "`$skip"                            = $skip
+    $run = $true;
+    while ($run) {
+        try {
+            if ($ExecutionUrl -match "https:\/\/dev\.azure\.com\/([^\/]+)\/([^\/]+)\/_build\/results\?buildId=(\d+)") {
+                $org = $matches[1]
+                $project = $matches[2]
+                $buildId = $matches[3]
             }
-            $queryString = ($query.GetEnumerator() | ForEach-Object {
-                    "{0}={1}" -f [uri]::EscapeDataString($_.Key), [uri]::EscapeDataString([string]$_.Value)
-                }) -join "&"
-
-            $repoEncoded = [uri]::EscapeDataString($repo)
-            $projectEncoded = [uri]::EscapeDataString($Project)
-            $uri = "https://dev.azure.com/$Organization/$projectEncoded/_apis/git/repositories/$repoEncoded/pullrequests?$queryString"
-
-            $response = Invoke-RestMethod -Method Get -Uri $uri -Headers $headers
-
-            foreach ($pr in $response.value) {
-                [pscustomobject]@{
-                    Repository    = $repo
-                    PullRequestId = $pr.pullRequestId
-                    Title         = $pr.title
-                    Description   = $pr.description
-                    Status        = $pr.status
-                    CreatedBy     = $pr.createdBy.displayName
-                    CreationDate  = [datetime]$pr.creationDate
-                    SourceBranch  = $pr.sourceRefName -replace '^refs/heads/', ''
-                    TargetBranch  = $pr.targetRefName -replace '^refs/heads/', ''
-                    Url           =
-                    "https://dev.azure.com/$Organization/$project/_git/$repo/pullrequest/$($pr.pullRequestId)"
-                }
+            else {
+                throw "Invalid Azure DevOps pipeline URL format."
+            }
+            $apiUrl = "https://dev.azure.com/$org/$project/_apis/build/builds/$($buildId)?api-version=7.0"
+            $encodedPAT = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$($env:PAT)"))
+            $headers = @{
+                "Authorization" = "Basic $encodedPAT"
+            }
+            $response = Invoke-RestMethod -Uri $apiUrl -Headers $headers -Method Get
+            $payload = [PSCustomObject]@{
+                BuildId    = $response.id
+                Status     = $response.status
+                Result     = $response.result
+                QueueTime  = $response.queueTime
+                StartTime  = $response.startTime
+                FinishTime = $response.finishTime
             }
 
-            $skip += $top
-        } while ($response.value.Count -eq $top)
+            if ($response.status -eq 'completed') {
+                $run = $false
+                return $payload
+            }
+            timer 30
+        }
+        catch {
+            Write-Error "Failed to retrieve pipeline status: $($_.Exception.Message)"
+            $run = $false
+        }
     }
 }

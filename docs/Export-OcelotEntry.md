@@ -13,7 +13,7 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Export-OcelotEntry [[-keys] <OcelotEntryKeys[]>] [-Prod]
+Export-OcelotEntry [[-keys] <OcelotEntryKeys[]>] [-Prod] [[-SourceFile] <String>] [-KeepExistingRoutes]
 ```
 
 ## DESCRIPTION
@@ -30,6 +30,21 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
+### -KeepExistingRoutes
+{{ Fill KeepExistingRoutes Description }}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Nomeado
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Prod
 {{ Fill Prod Description }}
 
@@ -40,6 +55,21 @@ Aliases:
 
 Required: False
 Position: Nomeado
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SourceFile
+{{ Fill SourceFile Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
