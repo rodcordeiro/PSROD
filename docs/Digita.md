@@ -1,11 +1,11 @@
 ---
 external help file: psrod-help.xml
 Module Name: psrod
-online version: https://github.com/rodcordeiro/PSROD/blob/main/Public/Authoral/Discord.ps1
+online version: https://github.com/fleschutz/PowerShell
 schema: 2.0.0
 ---
 
-# Export-SwaggerAsOcelot
+# Digita
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
@@ -13,7 +13,7 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Export-SwaggerAsOcelot [-Porta] <Int32> [-Chave] <String> [-Prod] [-ReturnAsObject] [<CommonParameters>]
+Digita [-Text] <String[]> [-SemEnter] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -22,7 +22,7 @@ Export-SwaggerAsOcelot [-Porta] <Int32> [-Chave] <String> [-Prod] [-ReturnAsObje
 ## EXAMPLES
 
 ### Example 1
-```
+```powershell
 PS C:\> {{ Add example code here }}
 ```
 
@@ -30,62 +30,32 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -Chave
-{{ Fill Chave Description }}
+### -SemEnter
+{{ Fill SemEnter Description }}
 
 ```yaml
-Type: String
+Type: SwitchParameter
 Parameter Sets: (All)
 Aliases:
 
-Required: True
-Position: 1
+Required: False
+Position: Nomeado
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Porta
-{{ Fill Porta Description }}
+### -Text
+{{ Fill Text Description }}
 
 ```yaml
-Type: Int32
+Type: String[]
 Parameter Sets: (All)
 Aliases:
 
 Required: True
 Position: 0
 Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -Prod
-{{ Fill Prod Description }}
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Nomeado
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ReturnAsObject
-{{ Fill ReturnAsObject Description }}
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Nomeado
-Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -95,8 +65,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.Int32
-### System.String
+### System.String[]
+
 ## OUTPUTS
 
 ### System.Object

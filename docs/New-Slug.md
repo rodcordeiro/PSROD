@@ -5,58 +5,69 @@ online version: http://gallery.technet.microsoft.com/Get-UserSessions-Parse-b4c9
 schema: 2.0.0
 ---
 
-# New-Appointment
+# New-Slug
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Generates a simple, readable slug (alias) from input text.
 
 ## SYNTAX
 
 ```
-New-Appointment [-WhatIf] [-Confirm] [<CommonParameters>]
+New-Slug [-InputString] <String> [[-MaxLen] <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+Converts a string into a URL/alias-safe slug:
+- Lowercases everything
+- Replaces spaces/underscores with dashes
+- Removes invalid characters
+- Collapses multiple dashes
+- Ensures max length (default: 16 chars) cutting at the nearest dash if possible
 
 ## EXAMPLES
 
-### Example 1
+### EXEMPLO 1
 ```
-PS C:\> {{ Add example code here }}
+New-Slug "Hello World! This is an Alias"
 ```
 
-{{ Add example description here }}
+# hello-world
+
+### EXEMPLO 2
+```
+New-Slug "Daily Check In" -MaxLen 12
+```
+
+# daily-check
 
 ## PARAMETERS
 
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
+### -InputString
+The text you want to convert into a slug.
 
 ```yaml
-Type: SwitchParameter
+Type: String
 Parameter Sets: (All)
-Aliases: cf
+Aliases:
 
-Required: False
-Position: Nomeado
-Default value: False
+Required: True
+Position: 1
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -WhatIf
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
+### -MaxLen
+Maximum allowed length of the slug (default: 16).
 
 ```yaml
-Type: SwitchParameter
+Type: Int32
 Parameter Sets: (All)
-Aliases: wi
+Aliases:
 
 Required: False
-Position: Nomeado
-Default value: False
+Position: 2
+Default value: 16
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -66,10 +77,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### Nenhum
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS

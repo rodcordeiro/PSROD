@@ -1,11 +1,11 @@
 ---
 external help file: psrod-help.xml
 Module Name: psrod
-online version: https://github.com/fleschutz/PowerShell
+online version: https://github.com/rodcordeiro/PSROD/blob/main/Public/Authoral/Discord.ps1
 schema: 2.0.0
 ---
 
-# ConvertTo-B64
+# Enter
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
@@ -13,7 +13,7 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-ConvertTo-B64 [[-Content] <String>] [<CommonParameters>]
+Enter [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -22,7 +22,7 @@ ConvertTo-B64 [[-Content] <String>] [<CommonParameters>]
 ## EXAMPLES
 
 ### Example 1
-```
+```powershell
 PS C:\> {{ Add example code here }}
 ```
 
@@ -30,27 +30,13 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -Content
-{{ Fill Content Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 0
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### System.String
+### Nenhum
+
 ## OUTPUTS
 
 ### System.Object

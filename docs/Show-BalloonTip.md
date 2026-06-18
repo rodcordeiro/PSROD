@@ -17,7 +17,7 @@ schema: 2.0.0
 ## EXAMPLES
 
 ### Example 1
-```powershell
+```
 PS C:\> {{ Add example code here }}
 ```
 

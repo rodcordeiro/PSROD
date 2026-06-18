@@ -22,7 +22,7 @@ Invoke-Loop [[-seconds] <Int32>] [[-action] <ScriptBlock>]
 ## EXAMPLES
 
 ### Example 1
-```powershell
+```
 PS C:\> {{ Add example code here }}
 ```
 
@@ -63,7 +63,6 @@ Accept wildcard characters: False
 ## INPUTS
 
 ### Nenhum
-
 ## OUTPUTS
 
 ### System.Object
