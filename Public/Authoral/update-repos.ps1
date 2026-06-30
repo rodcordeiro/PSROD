@@ -1,6 +1,6 @@
 ﻿function Update-Repos {
 
-    $folders = Get-Repositories
+    $folders = Get-Repository
     Discord -Avatar "https://rodcordeiro.github.io/shares/img/eu.jpg" -Username "Script do rod" -Webhook $env:DISCORD_WEBHOOK -Content "Ignorem. Estou rodando um script de atualizacao automatica dos repositorios"
     for ($i = 0; $i -le ($folders.length - 1); $i += 1) {
         $folder = $folders[$i]
