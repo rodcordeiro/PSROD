@@ -42,6 +42,9 @@ function Invoke-SafeCleanup {
 .PARAMETER PassThru
     Retorna um objeto com o resumo da limpeza.
 
+.PARAMETER Silent
+    Suprime mensagens informativas e resumo escritos no host.
+
 .PARAMETER WhatIf
     Mostra o que seria removido sem apagar arquivos.
 
@@ -56,6 +59,10 @@ function Invoke-SafeCleanup {
 .EXAMPLE
     . .\Invoke-SafeCleanup.ps1
     Invoke-SafeCleanup -Full -MinimumAgeHours 6 -PassThru
+
+.EXAMPLE
+    . .\Invoke-SafeCleanup.ps1
+    Invoke-SafeCleanup -Silent
 #>
     [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
     param(
@@ -64,11 +71,14 @@ function Invoke-SafeCleanup {
         [ValidateRange(0, 8760)]
         [int]$MinimumAgeHours = 24,
 
-        [switch]$PassThru
+        [switch]$PassThru,
+
+        [switch]$Silent
     )
 
     Set-StrictMode -Version Latest
 
+    $isSilent = $Silent.IsPresent
     $cutoff = (Get-Date).AddHours(-$MinimumAgeHours)
     $summary = [ordered]@{
         Mode           = if ($Full) { 'Full' } else { 'Default' }
@@ -93,6 +103,14 @@ function Invoke-SafeCleanup {
         if ($Bytes -ge 1MB) { return '{0:N2} MB' -f ($Bytes / 1MB) }
         if ($Bytes -ge 1KB) { return '{0:N2} KB' -f ($Bytes / 1KB) }
         return '{0:N0} B' -f $Bytes
+    }
+
+    function Write-CleanupHost {
+        param([AllowEmptyString()][string]$Message)
+
+        if (-not $isSilent) {
+            Write-Host $Message
+        }
     }
 
     function Resolve-ExistingPath {
@@ -163,7 +181,7 @@ function Invoke-SafeCleanup {
         $summary.TargetsVisited++
         $files = @(Get-CleanupFiles -Path $resolved -Include $Include)
         if ($files.Count -eq 0) {
-            Write-Host "Sem itens antigos em $Label"
+            Write-CleanupHost "Sem itens antigos em $Label"
             return
         }
 
@@ -273,7 +291,7 @@ function Invoke-SafeCleanup {
         }
     }
 
-    Write-Host "Iniciando limpeza segura. Modo: $($summary.Mode). Itens mais novos que $MinimumAgeHours hora(s) serao preservados."
+    Write-CleanupHost "Iniciando limpeza segura. Modo: $($summary.Mode). Itens mais novos que $MinimumAgeHours hora(s) serao preservados."
 
     $isAdmin = Test-IsAdministrator
     if ($Full -and -not $isAdmin) {
@@ -319,13 +337,13 @@ function Invoke-SafeCleanup {
         Errors         = $summary.Errors
     }
 
-    Write-Host ''
-    Write-Host 'Resumo da limpeza'
-    Write-Host "Alvos avaliados : $($result.TargetsVisited)"
-    Write-Host "Arquivos removidos: $($result.FilesRemoved)"
-    Write-Host "Espaco liberado   : $($result.FreedSpace)"
-    Write-Host "Itens ignorados   : $($result.Skipped)"
-    Write-Host "Erros             : $($result.Errors)"
+    Write-CleanupHost ''
+    Write-CleanupHost 'Resumo da limpeza'
+    Write-CleanupHost "Alvos avaliados : $($result.TargetsVisited)"
+    Write-CleanupHost "Arquivos removidos: $($result.FilesRemoved)"
+    Write-CleanupHost "Espaco liberado   : $($result.FreedSpace)"
+    Write-CleanupHost "Itens ignorados   : $($result.Skipped)"
+    Write-CleanupHost "Erros             : $($result.Errors)"
 
     if ($PassThru) {
         return $result
