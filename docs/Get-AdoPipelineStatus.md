@@ -8,7 +8,6 @@ schema: 2.0.0
 # Get-AdoPipelineStatus
 
 ## SYNOPSIS
-
 Consulta o status de uma execu § £o de pipeline no Azure DevOps at © que ela seja conclu -da.
 
 ## SYNTAX
@@ -18,13 +17,11 @@ Get-AdoPipelineStatus [-ExecutionUrl] <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-
 {{ Fill in the Description }}
 
 ## EXAMPLES
 
 ### Example 1
-
 ```powershell
 PS C:\> {{ Add example code here }}
 ```
@@ -34,7 +31,6 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -ExecutionUrl
-
 URL da execu § £o do pipeline no Azure DevOps, contendo o buildId na rota de resultados.
 
 ```yaml
@@ -50,7 +46,6 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
@@ -58,16 +53,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ### PSCustomObject com identificador da build, status, resultado, hor ¡rio de entrada na fila, in -cio e t ©rmino.
-
 ## NOTES
-
-Usa a vari ¡vel de ambiente PAT para autentica § £o Basic na API de builds do Azure DevOps.
-
-## RELATED LINKS
-### PSCustomObject com identificador da build, status, resultado, hor ¡rio de entrada na fila, in -cio e t ©rmino
-
-## NOTES
-
 Usa a vari ¡vel de ambiente PAT para autentica § £o Basic na API de builds do Azure DevOps.
 
 ## RELATED LINKS

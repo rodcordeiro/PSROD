@@ -1,7 +1,7 @@
 ---
 external help file: psrod-help.xml
 Module Name: psrod
-online version: http://gallery.technet.microsoft.com/Get-UserSessions-Parse-b4c97837
+online version: https://github.com/fleschutz/PowerShell
 schema: 2.0.0
 ---
 
