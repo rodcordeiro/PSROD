@@ -34,8 +34,10 @@ function Invoke-Download {
         preservado, do servidor e das políticas do serviço. Não importa arquivos
         parciais de outros programas. Fechar a sessão ou reiniciar o computador
         não garante execução contínua; volte a chamar a função ao entrar novamente.
-        Jobs em erro são preservados para diagnóstico e retomada explícita via
-        Resume-BitsTransfer, ou descarte via Remove-BitsTransfer.
+        Jobs em erro são preservados para diagnóstico e retomados uma vez quando
+        a função é chamada novamente com a mesma URL e destino. Erros persistentes
+        continuam preservados para retomada explícita via Resume-BitsTransfer ou
+        descarte via Remove-BitsTransfer.
     .LINK
         https://learn.microsoft.com/powershell/module/bitstransfer/start-bitstransfer
     #>
@@ -104,6 +106,10 @@ function Invoke-Download {
         if ($job.TransferType -ne 'Download' -or $files.Count -ne 1 -or
             $files[0].RemoteName -cne $Uri.AbsoluteUri) {
             throw 'Outro job BITS usa esse destino com origem ou configuração diferente.'
+        }
+        if ([string]$job.JobState -eq 'Error') {
+            Write-Verbose "Retomando job BITS existente em estado de erro: $($job.JobId)"
+            Resume-BitsTransfer -BitsJob $job -Asynchronous -ErrorAction Stop | Out-Null
         }
     } else {
         $parameters = @{
