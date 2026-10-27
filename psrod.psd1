@@ -8,7 +8,7 @@
 
 @{
     RootModule        = '.\psrod.psm1'
-    ModuleVersion     = '1.16.1'
+    ModuleVersion     = '1.17.0'
     # CompatiblePSEditions = @()
     GUID              = '75c2e6dc-8300-44d2-9b28-f48d5d35cf64'
     Author            = 'Rodrigo Cordeiro'
