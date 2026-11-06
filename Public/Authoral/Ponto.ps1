@@ -16,13 +16,14 @@ function Ponto {
         - Listar: mostra as batidas de um dia.
         - Falta: sinaliza falta num dia útil sem batidas; o Dash desconta a jornada inteira do banco de horas.
         - Alertas: lista as batidas a ajustar nos 7 dias anteriores a -Date, no formato
-          "matricula;data;horario-esperado;horario-marcado".
+          "matricula;nome;data;horario-esperado;horario-marcado". Alerta entrada depois de Entrada (07:30),
+          saída antes de Saida (17:15), almoço com um ponto só (sem retorno), batidas ausentes e batidas extras.
         - Dash: calcula banco de horas, atrasos, saídas antecipadas, médias e alertas da CLT
           (intervalo < 1h, jornada > 10h, descanso < 11h). Com -Monthly, resume um mês e compara com o anterior.
 
         A jornada é configurável em ~/.pontos.config.json (chaves Entrada, Saida, Almoco, Tolerancia,
-        IntervaloMinimo, LimiteSemIntervalo, Interjornada, JornadaMaxima, InicioAlmoco e Matricula).
-        Sem o arquivo, vale 07:30-17:15 com 1h de almoço, tolerância de 5 min e a matrícula $env:USERNAME.
+        IntervaloMinimo, LimiteSemIntervalo, Interjornada, JornadaMaxima, InicioAlmoco, Matricula e Nome).
+        Sem o arquivo, vale 07:30-17:15 com 1h de almoço, tolerância de 5 min e matrícula e nome $env:USERNAME.
     .PARAMETER Action
         Ação a executar: Registrar, Listar, Falta, Alertas ou Dash.
     .PARAMETER Date
@@ -193,6 +194,7 @@ function Ponto {
                 JornadaMaxima      = "10:00"
                 InicioAlmoco       = "12:00"
                 Matricula          = $env:USERNAME
+                Nome               =  $env:USERNAME
             }
             if (Test-Path -Path $ConfigPath) {
                 try {
@@ -222,6 +224,7 @@ function Ponto {
                     JornadaMaxima      = [timespan]$valores.JornadaMaxima
                     InicioAlmoco       = [timespan]$valores.InicioAlmoco
                     Matricula          = [string]$valores.Matricula
+                    Nome               = [string]$valores.Nome
                 }
             }
             catch {
@@ -267,7 +270,7 @@ function Ponto {
                 if ($falta) {
                     # Falta sinalizada: desconta a jornada inteira do banco.
                     $completo = $true
-                    $saldo = if ($util) { -$esperado } else { 0 }
+                    $saldo = if ($util) { - $esperado } else { 0 }
                     $obs += "Falta"
                 }
                 else {
@@ -498,7 +501,7 @@ function Ponto {
             .SYNOPSIS
                 Lista as batidas a ajustar nos 7 dias anteriores a -Date.
             .DESCRIPTION
-                Saída no formato "matricula;data;horario-esperado;horario-marcado", com cabeçalho. Campo vazio indica batida ausente (marcado) ou não prevista (esperado). Considera entrada/saída fora da tolerância, retorno com intervalo diferente do configurado, batidas faltantes, dias úteis sem batida e batidas extras. Ignora fins de semana e faltas sinalizadas.
+                Saída no formato "matricula;nome;data;horario-esperado;horario-marcado", com cabeçalho. Campo vazio indica batida ausente (marcado) ou não prevista (esperado). Alerta quando a entrada é posterior a Entrada (padrão 07:30), quando a saída é anterior a Saida (padrão 17:15), quando o almoço tem um ponto só (falta o retorno), quando falta qualquer batida e quando há batidas extras. Ignora faltas sinalizadas.
             .PARAMETER Date
                 Data de referência; analisa de Date-7 a Date-1. Padrão: hoje.
             .OUTPUTS
@@ -519,34 +522,56 @@ function Ponto {
             }
             process {
                 $registros = @(Get-PontoEntry | Where-Object { $_.Date -ge $inicio -and $_.Date -le $fim })
-                Write-Output "matricula;data;horario-esperado;horario-marcado"
+                Write-Output "matricula;nome;data;horario-esperado;horario-marcado"
                 for ($dia = $inicio; $dia -le $fim; $dia = $dia.AddDays(1)) {
-                    if ($dia.DayOfWeek -in @([DayOfWeek]::Saturday, [DayOfWeek]::Sunday)) { continue }
+                    # if ($dia.DayOfWeek -in @([DayOfWeek]::Saturday, [DayOfWeek]::Sunday)) { continue }
                     $doDia = @($registros | Where-Object { $_.Date -eq $dia })
                     # Falta sinalizada já foi tratada; não é incidente.
                     if ($doDia | Where-Object Label -eq "Falta") { continue }
 
-                    # Posições na ordem do dia: Entrada, Almoço, Retorno, Saída; o retorno esperado é almoço + duração do intervalo.
                     $horas = @($doDia | Sort-Object Time | ForEach-Object { $_.Time.TimeOfDay })
-                    $almoco = if ($horas.Count -ge 2) { $horas[1] } else { $Config.InicioAlmoco }
-                    $esperados = @($Config.Entrada, $Config.InicioAlmoco, ($almoco + $Config.Almoco), $Config.Saida)
+                    $n = $horas.Count
 
-                    for ($i = 0; $i -lt [math]::Max($esperados.Count, $horas.Count); $i++) {
-                        $esperado = if ($i -lt $esperados.Count) { $esperados[$i] } else { $null }
-                        $marcado = if ($i -lt $horas.Count) { $horas[$i] } else { $null }
-                        $incidente = if ($null -eq $marcado -or $null -eq $esperado) {
-                            $true
-                        }
-                        elseif ($i -eq 1) {
-                            # Saída para o almoço não tem horário fixo; o intervalo é cobrado no retorno.
-                            $false
-                        }
-                        else {
-                            [math]::Abs(($marcado - $esperado).TotalMinutes) -gt $Config.Tolerancia
-                        }
-                        if ($incidente) {
-                            Write-Output ("{0};{1:dd/MM/yyyy};{2};{3}" -f $Config.Matricula, $dia, (& $formatar $esperado), (& $formatar $marcado))
-                        }
+                    # Papéis do dia: a primeira batida é a entrada e a última é a saída. Com 3 batidas,
+                    # a terceira é saída quando está mais perto do fim da jornada do que do retorno
+                    # esperado (almoço + intervalo); nesse caso falta o retorno do almoço.
+                    $entrada = if ($n -ge 1) { $horas[0] } else { $null }
+                    $almoco = if ($n -ge 3) { $horas[1] } else { $null }
+                    $saida = $null
+                    if ($n -eq 2) {
+                        # Com 2 batidas, a segunda é saída se estiver mais perto do fim da jornada que do almoço.
+                        $distSaida = [math]::Abs(($horas[1] - $Config.Saida).TotalMinutes)
+                        $distAlmoco = [math]::Abs(($horas[1] - $Config.InicioAlmoco).TotalMinutes)
+                        if ($distSaida -lt $distAlmoco) { $saida = $horas[1] } else { $almoco = $horas[1] }
+                    }
+                    $retornoEsperado = (& { if ($null -ne $almoco) { $almoco } else { $Config.InicioAlmoco } }) + $Config.Almoco
+                    $retorno = $null
+                    $extras = @()
+                    if ($n -eq 3) {
+                        $distSaida = [math]::Abs(($horas[2] - $Config.Saida).TotalMinutes)
+                        $distRetorno = [math]::Abs(($horas[2] - $retornoEsperado).TotalMinutes)
+                        if ($distSaida -lt $distRetorno) { $saida = $horas[2] } else { $retorno = $horas[2] }
+                    }
+                    elseif ($n -ge 4) {
+                        $retorno = $horas[2]
+                        $saida = $horas[-1]
+                        if ($n -gt 4) { $extras = $horas[3..($n - 2)] }
+                    }
+
+                    $incidentes = @(
+                        # Entrada depois do horário configurado (padrão 07:30), ou ausente.
+                        if ($null -eq $entrada -or $entrada -gt $Config.Entrada) { , @($Config.Entrada, $entrada) }
+                        # Saída para o almoço ausente.
+                        if ($null -eq $almoco) { , @($Config.InicioAlmoco, $null) }
+                        # Almoço com um ponto só: falta o retorno.
+                        if ($null -eq $retorno) { , @($retornoEsperado, $null) }
+                        # Batidas além das quatro previstas.
+                        foreach ($extra in $extras) { , @($null, $extra) }
+                        # Saída antes do horário configurado (padrão 17:15), ou ausente.
+                        if ($null -eq $saida -or $saida -lt $Config.Saida) { , @($Config.Saida, $saida) }
+                    )
+                    foreach ($incidente in $incidentes) {
+                        Write-Output ("{0};{1};{2:dd/MM/yyyy};{3};{4}" -f $Config.Matricula, $Config.Nome, $dia, (& $formatar $incidente[0]), (& $formatar $incidente[1]))
                     }
                 }
             }
@@ -655,9 +680,9 @@ function Ponto {
 
                 if ($PassThru) {
                     [pscustomobject]@{
-                        Dias         = $dias
-                        Resumo       = $r
-                        MesAnterior  = $anterior
+                        Dias        = $dias
+                        Resumo      = $r
+                        MesAnterior = $anterior
                     }
                 }
             }
