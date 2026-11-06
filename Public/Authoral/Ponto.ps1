@@ -194,7 +194,7 @@ function Ponto {
                 JornadaMaxima      = "10:00"
                 InicioAlmoco       = "12:00"
                 Matricula          = $env:USERNAME
-                Nome               =  $env:USERNAME
+                Nome               = $env:USERNAME
             }
             if (Test-Path -Path $ConfigPath) {
                 try {
@@ -524,8 +524,8 @@ function Ponto {
                 $registros = @(Get-PontoEntry | Where-Object { $_.Date -ge $inicio -and $_.Date -le $fim })
                 Write-Output "matricula;nome;data;horario-esperado;horario-marcado"
                 for ($dia = $inicio; $dia -le $fim; $dia = $dia.AddDays(1)) {
-                    # if ($dia.DayOfWeek -in @([DayOfWeek]::Saturday, [DayOfWeek]::Sunday)) { continue }
                     $doDia = @($registros | Where-Object { $_.Date -eq $dia })
+                    if ($dia.DayOfWeek -in @([DayOfWeek]::Saturday, [DayOfWeek]::Sunday) -and $null -ne $doDia) { continue }
                     # Falta sinalizada já foi tratada; não é incidente.
                     if ($doDia | Where-Object Label -eq "Falta") { continue }
 
