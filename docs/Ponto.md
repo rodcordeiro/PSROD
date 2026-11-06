@@ -45,13 +45,14 @@ Mantém as batidas em ~/.pontos.tsf (uma por linha, separada por TAB) e oferece 
 - Listar: mostra as batidas de um dia.
 - Falta: sinaliza falta num dia útil sem batidas; o Dash desconta a jornada inteira do banco de horas.
 - Alertas: lista as batidas a ajustar nos 7 dias anteriores a -Date, no formato
-  "matricula;data;horario-esperado;horario-marcado".
+  "matricula;nome;data;horario-esperado;horario-marcado". Alerta entrada depois de Entrada (07:30),
+  saída antes de Saida (17:15), almoço com um ponto só (sem retorno), batidas ausentes e batidas extras.
 - Dash: calcula banco de horas, atrasos, saídas antecipadas, médias e alertas da CLT
   (intervalo \< 1h, jornada \> 10h, descanso \< 11h). Com -Monthly, resume um mês e compara com o anterior.
 
 A jornada é configurável em ~/.pontos.config.json (chaves Entrada, Saida, Almoco, Tolerancia,
-IntervaloMinimo, LimiteSemIntervalo, Interjornada, JornadaMaxima, InicioAlmoco e Matricula).
-Sem o arquivo, vale 07:30-17:15 com 1h de almoço, tolerância de 5 min e a matrícula $env:USERNAME.
+IntervaloMinimo, LimiteSemIntervalo, Interjornada, JornadaMaxima, InicioAlmoco, Matricula e Nome).
+Sem o arquivo, vale 07:30-17:15 com 1h de almoço, tolerância de 5 min e matrícula e nome $env:USERNAME.
 
 ## EXAMPLES
 
